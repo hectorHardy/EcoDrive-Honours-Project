@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">EcoDrive</string>
+
+    <!-- Home Page -->
+    <string name="tv_tips">tip of the day from DB?</string>
+
+    <string name="btn_record_drive_page">Record Drive</string>
+    <string name="btn_history">Driving History</string>
+    <string name="btn_leaderboards">Leaderboards</string>
+    <string name="btn_rewards">Rewards</string>
+
+    <!-- Record Drive Page -->
+    <string name="btn_record_start">Start Journey</string>
+    <string name="btn_record_end">End Journey</string>
+
 </resources>

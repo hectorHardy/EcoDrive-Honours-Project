@@ -82,10 +82,14 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
         NavController navController = Navigation.findNavController(v);
 
 
-//        if (v.getId() == R.id.btn_record_drive_page) {
-//            System.out.println("recipes button clicked");
-//            navController.navigate(R.id.);
-//        }
+        if (v.getId() == R.id.btn_record_drive_page) {
+            System.out.println("record nav button clicked");
+            navController.navigate(R.id.action_homePageFragment_to_recordDriveFragment);
+        } else if (v.getId() == R.id.btn_history) {
+            System.out.println("record nav button clicked");
+            navController.navigate(R.id.action_homePageFragment_to_historyFragment);
+        }
+
     }
 
 }

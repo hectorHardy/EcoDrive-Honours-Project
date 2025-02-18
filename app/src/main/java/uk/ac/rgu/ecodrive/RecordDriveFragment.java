@@ -76,7 +76,7 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
         super.onViewCreated(view, savedInstanceState);
 
         //for initiating recording
-        Button btn_record = view.findViewById(R.id.btn_record);
+        btn_record = view.findViewById(R.id.btn_record);
         btn_record.setOnClickListener(this);
     }
 

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/homePageFragment">
+
+    <fragment
+        android:id="@+id/homePageFragment"
+        android:name="uk.ac.rgu.ecodrive.HomePageFragment"
+        android:label="fragment_home_page"
+        tools:layout="@layout/fragment_home_page" >
+        <action
+            android:id="@+id/action_homePageFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
+        <action
+            android:id="@+id/action_homePageFragment_to_recordDriveFragment"
+            app:destination="@id/recordDriveFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="uk.ac.rgu.ecodrive.HistoryFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" />
+    <fragment
+        android:id="@+id/recordDriveFragment"
+        android:name="uk.ac.rgu.ecodrive.RecordDriveFragment"
+        android:label="fragment_record_drive"
+        tools:layout="@layout/fragment_record_drive" />
+</navigation>

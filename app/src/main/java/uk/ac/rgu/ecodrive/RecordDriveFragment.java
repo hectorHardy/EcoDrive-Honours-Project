@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,9 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private boolean isRecording = false; // Flag to track button state
+    private Button btn_record; // Declare button globally
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -71,7 +75,7 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
-        //for navigating to the record page
+        //for initiating recording
         Button btn_record = view.findViewById(R.id.btn_record);
         btn_record.setOnClickListener(this);
     }
@@ -79,12 +83,20 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
 
-        NavController navController = Navigation.findNavController(v);
+        if (v.getId() == R.id.btn_record) { // mix of chatGPT and appDev module code
+            System.out.println("record button clicked");
+            isRecording = !isRecording; // Toggle state
 
+            if (isRecording) {
+                btn_record.setText(getString(R.string.btn_record_end));
+                Log.d("RecordDriveFragment", "Recording Started");
+                // TODO: Start recording logic
+            } else {
+                btn_record.setText(getString(R.string.btn_record_start));
+                Log.d("RecordDriveFragment", "Recording Stopped");
+                // TODO: Stop recording logic
+            }
 
-//        if (v.getId() == R.id.btn_record_drive_page) {
-//            System.out.println("recipes button clicked");
-//            navController.navigate(R.id.);
-//        }
+        }
     }
 }

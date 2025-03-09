@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -22,6 +24,8 @@ public class LoginFragment extends Fragment{
 
     TextInputEditText txtIn_username, txtIn_password;
     Button btn_login;
+    ProgressBar pgBar_login;
+    TextView txt_signUpHere;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -80,15 +84,24 @@ public class LoginFragment extends Fragment{
         txtIn_username = view.findViewById(R.id.txtIn_username);
         txtIn_password = view.findViewById(R.id.txtIn_password);
         btn_login = view.findViewById(R.id.btn_login);
+        pgBar_login = view.findViewById(R.id.pgBar_signUp);
+        txt_signUpHere = view.findViewById(R.id.txt_signUpHere);
 
         btn_login.setOnClickListener(this::onClick);
+        txt_signUpHere.setOnClickListener(this::onClick);
 
     }
 
     public void onClick(View v){
-        String username, password;
-        username = String.valueOf(txtIn_username.getText());
-        password = String.valueOf(txtIn_password.getText());
+        if(v.getId() == R.id.btn_login){
+            pgBar_login.setVisibility(View.VISIBLE);
+            String username, password;
+            username = String.valueOf(txtIn_username.getText());
+            password = String.valueOf(txtIn_password.getText());
+        } else if(v.getId() == R.id.txt_signUpHere){
+
+        }
+
     }
 
 }

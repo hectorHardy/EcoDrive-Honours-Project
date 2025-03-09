@@ -19,8 +19,10 @@
     <string name="txtIn_username">Username</string>
     <string name="txtIn_password">Password</string>
     <string name="btn_login">login</string>
+    <string name="txt_signUpHere">click here to create a new account</string>
 
     <!-- SignUp Page -->
     <string name="btn_signUp">Sign Up</string>
+    <string name="txt_loginHere">click here to login</string>
 
 </resources>

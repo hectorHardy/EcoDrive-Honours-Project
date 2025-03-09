@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/homePageFragment">
+    app:startDestination="@id/LoginFragment">
 
     <fragment
         android:id="@+id/homePageFragment"
@@ -27,4 +27,25 @@
         android:name="uk.ac.rgu.ecodrive.RecordDriveFragment"
         android:label="fragment_record_drive"
         tools:layout="@layout/fragment_record_drive" />
+    <fragment
+        android:id="@+id/LoginFragment"
+        android:name="uk.ac.rgu.ecodrive.LoginFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" >
+        <action
+            android:id="@+id/action_LoginFragment_to_SignUpFragment"
+            app:destination="@id/SignUpFragment" />
+        <action
+            android:id="@+id/action_LoginFragment_to_homePageFragment"
+            app:destination="@id/homePageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/SignUpFragment"
+        android:name="uk.ac.rgu.ecodrive.SignUpFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" >
+        <action
+            android:id="@+id/action_SignUpFragment_to_LoginFragment"
+            app:destination="@id/LoginFragment" />
+    </fragment>
 </navigation>

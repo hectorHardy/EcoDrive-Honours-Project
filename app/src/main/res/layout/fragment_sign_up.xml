@@ -40,4 +40,25 @@
         app:layout_constraintEnd_toEndOf="@+id/txtIn_password"
         app:layout_constraintStart_toStartOf="@+id/txtIn_password"
         app:layout_constraintTop_toBottomOf="@+id/txtIn_password" />
+
+    <ProgressBar
+        android:id="@+id/pgBar_signUp"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/btn_signUp"
+        app:layout_constraintStart_toStartOf="@+id/btn_signUp"
+        app:layout_constraintTop_toBottomOf="@+id/btn_signUp" />
+
+    <TextView
+        android:id="@+id/txt_loginHere"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txt_loginHere"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/btn_signUp"
+        app:layout_constraintStart_toStartOf="@+id/btn_signUp"
+        app:layout_constraintTop_toBottomOf="@+id/btn_signUp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

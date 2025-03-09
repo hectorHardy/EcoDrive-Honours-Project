@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,6 +33,7 @@ public class SignUpFragment extends Fragment {
 
     TextInputEditText txtIn_username, txtIn_password;
     Button btn_signUp;
+    ProgressBar pgBar_signUp;
     FirebaseAuth mAuth;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -90,19 +92,20 @@ public class SignUpFragment extends Fragment {
         txtIn_username = view.findViewById(R.id.txtIn_username);
         txtIn_password = view.findViewById(R.id.txtIn_password);
         btn_signUp = view.findViewById(R.id.btn_signUp);
+        pgBar_signUp = view.findViewById(R.id.pgBar_signUp);
 
         btn_signUp.setOnClickListener(this::onClick);
 
     }
 
     public void onClick(View v){
-
+        pgBar_signUp.setVisibility(View.VISIBLE);
         String username, password;
         username = String.valueOf(txtIn_username.getText());
         password = String.valueOf(txtIn_password.getText());
 
         if (TextUtils.isEmpty(username)){
-            Toast.makeText(getContext(), "enter email", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "enter username", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -115,6 +118,7 @@ public class SignUpFragment extends Fragment {
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        pgBar_signUp.setVisibility(View.GONE);
                         if (task.isSuccessful()) {
 
                             Toast.makeText(getContext(), "Account Created", Toast.LENGTH_SHORT);

@@ -9,10 +9,12 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView6"
         android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="391dp"
-        android:layout_height="783dp"
+        android:layout_width="416dp"
+        android:layout_height="728dp"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/navigation"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/navigation" />
 </androidx.constraintlayout.widget.ConstraintLayout>

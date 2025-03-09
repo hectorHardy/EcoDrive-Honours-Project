@@ -10,6 +10,7 @@
     <string name="btn_rewards">Rewards</string>
 
     <string name="txt_userInfo">Logged In</string>
+    <string name="btn_logout">logout</string>
 
     <!-- Record Drive Page -->
     <string name="btn_record_start">Start Journey</string>

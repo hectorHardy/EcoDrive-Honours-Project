@@ -81,6 +81,7 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
         NavController navController = NavHostFragment.findNavController(this);
         TextView txt_userInfo = getView().findViewById(R.id.txt_userInfo);
 
+
         if(user == null){
             navController.navigate(R.id.action_homePageFragment_to_LoginFragment);
         } else{
@@ -94,6 +95,10 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
         //for navigating to the record page
         Button btn_recipes = view.findViewById(R.id.btn_record_drive_page);
         btn_recipes.setOnClickListener(this);
+
+        Button btn_logout = getView().findViewById(R.id.btn_logout);
+        btn_logout.setOnClickListener(this);
+
     }
 
     @Override
@@ -108,6 +113,9 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
         } else if (v.getId() == R.id.btn_history) {
             System.out.println("record nav button clicked");
             navController.navigate(R.id.action_homePageFragment_to_historyFragment);
+        } else if (v.getId() == R.id.btn_logout){
+            FirebaseAuth.getInstance().signOut();
+            navController.navigate(R.id.action_homePageFragment_to_LoginFragment);
         }
 
     }

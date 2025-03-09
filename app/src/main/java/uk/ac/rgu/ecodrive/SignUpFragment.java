@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -37,6 +38,7 @@ public class SignUpFragment extends Fragment {
     EditText txtIn_username, txtIn_password;
     Button btn_signUp;
     ProgressBar pgBar_signUp;
+    TextView txt_loginHere;
     FirebaseAuth mAuth;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -96,8 +98,10 @@ public class SignUpFragment extends Fragment {
         txtIn_password = view.findViewById(R.id.txtIn_password);
         btn_signUp = view.findViewById(R.id.btn_signUp);
         pgBar_signUp = view.findViewById(R.id.pgBar_signUp);
+        txt_loginHere = view.findViewById(R.id.txt_loginHere);
 
         btn_signUp.setOnClickListener(this::onClick);
+        txt_loginHere.setOnClickListener(this::onClick);
 
     }
 

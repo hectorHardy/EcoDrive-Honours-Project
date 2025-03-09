@@ -22,8 +22,8 @@
         android:id="@+id/btn_record_drive_page"
         android:layout_width="174dp"
         android:layout_height="119dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="92dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="88dp"
         android:text="@string/btn_record_drive_page"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_tips" />
@@ -58,5 +58,16 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/btn_record_drive_page"
         app:layout_constraintTop_toTopOf="@+id/btn_record_drive_page" />
+
+    <TextView
+        android:id="@+id/txt_userInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_leaderbaords"
+        app:layout_constraintVertical_bias="0.731" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,15 +5,26 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,10 +33,12 @@ import com.google.android.material.textfield.TextInputEditText;
  */
 public class LoginFragment extends Fragment{
 
-    TextInputEditText txtIn_username, txtIn_password;
+    TextView txtIn_username, txtIn_password;
     Button btn_login;
     ProgressBar pgBar_login;
     TextView txt_signUpHere;
+    FirebaseAuth mAuth;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -59,8 +72,23 @@ public class LoginFragment extends Fragment{
     }
 
     @Override
+    public void onStart() { //check if user is already logged in before loading fragment.
+        super.onStart();
+
+        // Get NavController
+        NavController navController = NavHostFragment.findNavController(this);
+
+        // Check if user is logged in
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            navController.navigate(R.id.action_LoginFragment_to_homePageFragment);
+        }
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -93,13 +121,44 @@ public class LoginFragment extends Fragment{
     }
 
     public void onClick(View v){
+
+        NavController navController = Navigation.findNavController(v);
+
         if(v.getId() == R.id.btn_login){
             pgBar_login.setVisibility(View.VISIBLE);
             String username, password;
             username = String.valueOf(txtIn_username.getText());
             password = String.valueOf(txtIn_password.getText());
-        } else if(v.getId() == R.id.txt_signUpHere){
 
+            if (TextUtils.isEmpty(username)) {
+                Toast.makeText(getContext(), "enter username", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (TextUtils.isEmpty(password)) {
+                Toast.makeText(getContext(), "enter password", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            mAuth.signInWithEmailAndPassword(username, password)
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d("SIGN IN", "signInWithEmail:success");
+                                navController.navigate(R.id.action_LoginFragment_to_homePageFragment);
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w("SIGN IN", "signInWithEmail:failure", task.getException());
+                                Toast.makeText(getContext(), "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+        } else if(v.getId() == R.id.txt_signUpHere){
+            navController.navigate(R.id.action_LoginFragment_to_SignUpFragment);
         }
 
     }

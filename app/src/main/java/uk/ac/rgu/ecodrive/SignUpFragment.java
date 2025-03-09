@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -99,42 +101,51 @@ public class SignUpFragment extends Fragment {
     }
 
     public void onClick(View v){
-        pgBar_signUp.setVisibility(View.VISIBLE);
-        String username, password;
-        username = String.valueOf(txtIn_username.getText());
-        password = String.valueOf(txtIn_password.getText());
 
-        if (TextUtils.isEmpty(username)){
-            Toast.makeText(getContext(), "enter username", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        NavController navController = Navigation.findNavController(v);
 
-        if (TextUtils.isEmpty(password)){
-            Toast.makeText(getContext(), "enter password", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        if (v.getId() == R.id.txt_loginHere) {
+            System.out.println("login txt button clicked");
+            navController.navigate(R.id.action_SignUpFragment_to_LoginFragment);
+        }else if(v.getId() == R.id.btn_signUp) {
 
-        mAuth.signInWithEmailAndPassword(username, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        pgBar_signUp.setVisibility(View.GONE);
-                        if (task.isSuccessful()) {
+            pgBar_signUp.setVisibility(View.VISIBLE);
+            String username, password;
+            username = String.valueOf(txtIn_username.getText());
+            password = String.valueOf(txtIn_password.getText());
 
-                            Toast.makeText(getContext(), "Account Created", Toast.LENGTH_SHORT);
+            if (TextUtils.isEmpty(username)) {
+                Toast.makeText(getContext(), "enter username", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                            // Sign in success, update UI with the signed-in user's information
-//                            Log.d("SIGN IN", "signInWithEmail:success");
-//                            FirebaseUser user = mAuth.getCurrentUser();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("SIGN IN", "signInWithEmail:failure", task.getException());
-                            Toast.makeText(getContext(), "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+            if (TextUtils.isEmpty(password)) {
+                Toast.makeText(getContext(), "enter password", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            mAuth.createUserWithEmailAndPassword(username, password)
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            pgBar_signUp.setVisibility(View.GONE);
+                            if (task.isSuccessful()) {
+
+                                Toast.makeText(getContext(), "Account Created", Toast.LENGTH_SHORT);
+
+                                // Sign in success, update UI with the signed-in user's information
+                                //                            Log.d("SIGN IN", "signInWithEmail:success");
+                                //                            FirebaseUser user = mAuth.getCurrentUser();
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w("SIGN IN", "signInWithEmail:failure", task.getException());
+                                Toast.makeText(getContext(), "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
 
+        }
     }
 
 }

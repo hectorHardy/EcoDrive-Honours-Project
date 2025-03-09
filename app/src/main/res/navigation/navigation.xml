@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_homePageFragment_to_recordDriveFragment"
             app:destination="@id/recordDriveFragment" />
+        <action
+            android:id="@+id/action_homePageFragment_to_LoginFragment"
+            app:destination="@id/LoginFragment" />
     </fragment>
     <fragment
         android:id="@+id/historyFragment"

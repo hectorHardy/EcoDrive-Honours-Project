@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -33,7 +34,7 @@ import com.google.firebase.auth.FirebaseUser;
  */
 public class SignUpFragment extends Fragment {
 
-    TextInputEditText txtIn_username, txtIn_password;
+    EditText txtIn_username, txtIn_password;
     Button btn_signUp;
     ProgressBar pgBar_signUp;
     FirebaseAuth mAuth;

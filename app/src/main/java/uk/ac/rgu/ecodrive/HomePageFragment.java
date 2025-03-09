@@ -32,7 +32,7 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
 
     FirebaseAuth auth;
     FirebaseUser user;
-    TextView txt_userInfo;
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -63,18 +63,8 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        NavController navController = NavHostFragment.findNavController(this);
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-        if(user == null){
-            navController.navigate(R.id.action_homePageFragment_to_LoginFragment);
-        } else{
-            txt_userInfo.setText(user.getEmail());
-        }
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -87,6 +77,19 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
+
+        NavController navController = NavHostFragment.findNavController(this);
+        TextView txt_userInfo = getView().findViewById(R.id.txt_userInfo);
+
+        if(user == null){
+            navController.navigate(R.id.action_homePageFragment_to_LoginFragment);
+        } else{
+            txt_userInfo.setText(user.getEmail());
+        }
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
 
         //for navigating to the record page
         Button btn_recipes = view.findViewById(R.id.btn_record_drive_page);

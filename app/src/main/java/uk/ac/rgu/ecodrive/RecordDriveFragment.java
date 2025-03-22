@@ -1,9 +1,14 @@
 package uk.ac.rgu.ecodrive;
 
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -13,13 +18,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link RecordDriveFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RecordDriveFragment extends Fragment implements View.OnClickListener {
+public class RecordDriveFragment extends Fragment implements View.OnClickListener, SensorEventListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,6 +34,9 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
 
     private boolean isRecording = false; // Flag to track button state
     private Button btn_record; // Declare button globally
+    private SensorManager sensorManager;
+    private Sensor accelerometer;
+    private TextView txt_accX;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -78,6 +87,13 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
         //for initiating recording
         btn_record = view.findViewById(R.id.btn_record);
         btn_record.setOnClickListener(this);
+
+        txt_accX = view.findViewById(R.id.txt_accX);
+
+        sensorManager = (SensorManager) requireActivity().getSystemService(getContext().SENSOR_SERVICE);
+        if (sensorManager != null) {
+            accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+        }
     }
 
     @Override
@@ -90,13 +106,39 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
             if (isRecording) {
                 btn_record.setText(getString(R.string.btn_record_end));
                 Log.d("RecordDriveFragment", "Recording Started");
-                // TODO: Start recording logic
+                sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
             } else {
                 btn_record.setText(getString(R.string.btn_record_start));
                 Log.d("RecordDriveFragment", "Recording Stopped");
-                // TODO: Stop recording logic
+                sensorManager.unregisterListener(this);
             }
 
         }
     }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if(isRecording){
+            float x = event.values[0];
+            float y = event.values[1];
+            float z = event.values[2];
+
+            double acceleration = Math.sqrt(x*x + y*y + z*z);
+            txt_accX.setText(String.format("acceleration: %.2f m/s²", acceleration));
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    @Override
+    public void onDestroyView() { //  stop listening for sensor input when fragment is left
+        super.onDestroyView();
+        if (sensorManager != null) {
+            sensorManager.unregisterListener(this);
+        }
+    }
+
 }

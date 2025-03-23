@@ -1,14 +1,20 @@
 package uk.ac.rgu.ecodrive;
 
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
 import android.os.Bundle;
+import android.Manifest;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -19,6 +25,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,6 +51,11 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private TextView txt_accX;
+    private TextView txt_accY;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private FusedLocationProviderClient fusedLocationClient;
+    private LocationRequest locationRequest; // check correct import
+    private LocationCallback locationCallback;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -73,11 +92,33 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
         }
     }
 
+    private final ActivityResultLauncher<String> locationPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+//                    startLocationUpdates();
+                } else {
+                    Toast.makeText(requireContext(), "Permission Denied", Toast.LENGTH_SHORT).show();
+                }
+            });
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
+
+        // Check if permission is granted
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Request permission using Activity Result API
+            locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+        } else {
+            //startLocationUpdates();
+        }
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_record_drive, container, false);
+
     }
 
     @Override
@@ -89,6 +130,7 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
         btn_record.setOnClickListener(this);
 
         txt_accX = view.findViewById(R.id.txt_accX);
+        txt_accY = view.findViewById(R.id.txt_accY);
 
         sensorManager = (SensorManager) requireActivity().getSystemService(getContext().SENSOR_SERVICE);
         if (sensorManager != null) {
@@ -107,10 +149,12 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
                 btn_record.setText(getString(R.string.btn_record_end));
                 Log.d("RecordDriveFragment", "Recording Started");
                 sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
+                startLocationUpdates();
             } else {
                 btn_record.setText(getString(R.string.btn_record_start));
                 Log.d("RecordDriveFragment", "Recording Stopped");
                 sensorManager.unregisterListener(this);
+                stopLocationUpdates();
             }
 
         }
@@ -133,12 +177,55 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
 
     }
 
+    private void startLocationUpdates() {
+        // Create LocationRequest using LocationRequest.Builder with the new Priority enum
+        locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 2000)
+                .setMinUpdateIntervalMillis(1000)  // Optional: Set the max wait time
+                .build();
+
+        // Set up a LocationCallback to handle location updates
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    return;
+                }
+                for (Location location : locationResult.getLocations()) {
+                    if (location != null) {
+                        float speed = location.getSpeed(); // Speed in meters/second
+                        float speedKmh = speed * 3.6f; // Convert to km/h
+                        Log.d("Speed", "Current Speed: " + speedKmh + " km/h");
+
+                        // Update UI with current speed
+                        TextView speedTextView = getView().findViewById(R.id.txt_accY);
+                        speedTextView.setText("Speed: " + speedKmh + " km/h");
+                    }
+                }
+            }
+        };
+
+        // Check if the app has permission before requesting location updates
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
+        }
+    }
+
+    private void stopLocationUpdates() {
+        if (fusedLocationClient != null) {
+            fusedLocationClient.removeLocationUpdates(locationCallback);
+        }
+    }
+
     @Override
     public void onDestroyView() { //  stop listening for sensor input when fragment is left
         super.onDestroyView();
         if (sensorManager != null) {
             sensorManager.unregisterListener(this);
+        } else if (fusedLocationClient != null) {
+            fusedLocationClient.removeLocationUpdates(locationCallback);
         }
     }
 
 }
+

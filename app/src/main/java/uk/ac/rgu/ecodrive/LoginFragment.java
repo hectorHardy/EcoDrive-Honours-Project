@@ -113,7 +113,7 @@ public class LoginFragment extends Fragment{
         txtIn_username = view.findViewById(R.id.txtIn_username);
         txtIn_password = view.findViewById(R.id.txtIn_password);
         btn_login = view.findViewById(R.id.btn_login);
-        pgBar_login = view.findViewById(R.id.pgBar_signUp);
+        pgBar_login = view.findViewById(R.id.pgBar_login);
         txt_signUpHere = view.findViewById(R.id.txt_signUpHere);
 
         btn_login.setOnClickListener(this::onClick);

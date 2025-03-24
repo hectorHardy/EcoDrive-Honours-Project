@@ -34,6 +34,17 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import uk.ac.rgu.ecodrive.api.OverpassApiService;
+import uk.ac.rgu.ecodrive.api.RetrofitClient;
+import uk.ac.rgu.ecodrive.models.OverpassResponse;
+import uk.ac.rgu.ecodrive.models.LocationData;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link RecordDriveFragment#newInstance} factory method to
@@ -52,10 +63,12 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
     private Sensor accelerometer;
     private TextView txt_accX;
     private TextView txt_accY;
+    private TextView txt_accZ;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationRequest locationRequest; // check correct import
     private LocationCallback locationCallback;
+    private List<Location> locationList = new ArrayList<>(); // Store recorded locations
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -131,6 +144,7 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
 
         txt_accX = view.findViewById(R.id.txt_accX);
         txt_accY = view.findViewById(R.id.txt_accY);
+        txt_accZ = view.findViewById(R.id.txt_accZ);
 
         sensorManager = (SensorManager) requireActivity().getSystemService(getContext().SENSOR_SERVICE);
         if (sensorManager != null) {
@@ -155,6 +169,7 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
                 Log.d("RecordDriveFragment", "Recording Stopped");
                 sensorManager.unregisterListener(this);
                 stopLocationUpdates();
+                Log.d("locationList", locationList.toString());
             }
 
         }
@@ -194,11 +209,19 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
                     if (location != null) {
                         float speed = location.getSpeed(); // Speed in meters/second
                         float speedKmh = speed * 3.6f; // Convert to km/h
+                        double latitude = location.getLatitude();
+                        double longitude = location.getLongitude();
+
+                        // Save location to list
+                        locationList.add(location);
+
+                        // Log & Display Location Data
+                        Log.d("Location", "Lat: " + latitude + ", Lng: " + longitude);
                         Log.d("Speed", "Current Speed: " + speedKmh + " km/h");
 
                         // Update UI with current speed
-                        TextView speedTextView = getView().findViewById(R.id.txt_accY);
-                        speedTextView.setText("Speed: " + speedKmh + " km/h");
+                        txt_accY.setText("Speed: " + speedKmh + " km/h");
+                        txt_accZ.setText("Lat: " + latitude + ", Lng: " + longitude);
                     }
                 }
             }
@@ -209,6 +232,53 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
                 == PackageManager.PERMISSION_GRANTED) {
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
         }
+    }
+
+    private void fetchSpeedLimits(List<Location> locations) {
+        if (locations.isEmpty()) {
+            Log.d("SpeedLimit", "No locations available to fetch speed limits.");
+            return;
+        }
+
+        // Build the Overpass API Query for Multiple Locations
+        StringBuilder query = new StringBuilder("[out:json];");
+        for (Location location : locations) {
+            double lat = location.getLatitude();
+            double lon = location.getLongitude();
+            query.append("way(around:50,").append(lat).append(",").append(lon).append(")[maxspeed];");
+        }
+        query.append("out;"); // Complete the query
+
+        OverpassApiService apiService = RetrofitClient.getClient();
+        Call<OverpassResponse> call = apiService.getSpeedLimit(query.toString());
+
+        call.enqueue(new Callback<OverpassResponse>() {
+            @Override
+            public void onResponse(Call<OverpassResponse> call, Response<OverpassResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<OverpassResponse.Element> elements = response.body().elements;
+                    if (elements != null && !elements.isEmpty()) {
+                        for (int i = 0; i < elements.size(); i++) {
+                            OverpassResponse.Element element = elements.get(i);
+                            if (element.tags != null && element.tags.maxspeed != null) {
+                                Log.d("SpeedLimit", "Location " + (i + 1) + ": " + element.tags.maxspeed + " km/h");
+                            } else {
+                                Log.d("SpeedLimit", "Location " + (i + 1) + ": No speed limit found");
+                            }
+                        }
+                    } else {
+                        Log.d("SpeedLimit", "No speed limit data found for any location");
+                    }
+                } else {
+                    Log.d("SpeedLimit", "API Response Failed");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OverpassResponse> call, Throwable t) {
+                Log.e("SpeedLimit", "API call failed: " + t.getMessage());
+            }
+        });
     }
 
     private void stopLocationUpdates() {

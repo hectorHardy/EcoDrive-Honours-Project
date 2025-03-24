@@ -6,6 +6,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface OverpassApiService {
-    @GET("uk/ac/rgu/ecodrive/api/interpreter")
+    @GET("api/interpreter")
     Call<OverpassResponse> getSpeedLimit(@Query("data") String data);
 }

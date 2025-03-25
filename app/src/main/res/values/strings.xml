@@ -2,10 +2,10 @@
     <string name="app_name">EcoDrive</string>
 
     <!-- Home Page -->
-    <string name="tv_tip1">steady acceleration and braking help to save fuel</string>
-    <string name="tv_tip2">reducing car weight can increase efficiency</string>
-    <string name="tv_tip3">make sure your tires are inflated to the recommended pressure for optimal traction and efficiency</string>
-    <string name="tv_tip4">stick to the speed limit to save fuel and increase safety!</string>
+    <string name="tv_tip1">Steady acceleration and braking helps to save fuel</string>
+    <string name="tv_tip2">Reducing car weight can increase efficiency</string>
+    <string name="tv_tip3">Make sure your tires are inflated to the recommended pressure for optimal traction and efficiency</string>
+    <string name="tv_tip4">Stick to the speed limit to save fuel and increase safety!</string>
 
     <string name="btn_record_drive_page">Record Drive</string>
     <string name="btn_history">Driving History</string>

@@ -243,10 +243,14 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
 
         // Build the Overpass API Query for Multiple Locations
         StringBuilder query = new StringBuilder("[out:json];");
-        for (LocationData location : locations) {
-            double lat = location.getLatitude();
-            double lon = location.getLongitude();
-            query.append("way(around:200,").append(lat).append(",").append(lon).append(")[maxspeed];");
+        for (int i = 0; i < locations.size(); i++) {
+            // Only get every 5th location (i % 5 == 0)
+            if (i % 5 == 0) {
+                LocationData location = locations.get(i);
+                double lat = location.getLatitude();
+                double lon = location.getLongitude();
+                query.append("way(around:20,").append(lat).append(",").append(lon).append(")[maxspeed];");
+            }
         }
         query.append("out;"); // Complete the query
 

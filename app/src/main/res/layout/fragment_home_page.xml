@@ -140,4 +140,12 @@
         app:layout_constraintStart_toEndOf="@+id/txt_userInfo"
         app:layout_constraintTop_toBottomOf="@+id/btn_leaderbaords" />
 
+    <ImageView
+        android:id="@+id/iv_car"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/car_32"
+        app:layout_constraintBottom_toTopOf="@+id/vf_tips"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

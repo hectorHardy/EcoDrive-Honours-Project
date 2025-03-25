@@ -1,9 +1,12 @@
 package uk.ac.rgu.ecodrive;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -13,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -33,6 +37,7 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
 
     FirebaseAuth auth;
     FirebaseUser user;
+    private ImageView iv_car;
 
 
     // TODO: Rename and change types of parameters
@@ -106,9 +111,8 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
         vf_tips.setOutAnimation(getContext(), android.R.anim.slide_out_right);
         vf_tips.startFlipping();
 
-        TextView tv_tip1 = view.findViewById(R.id.tv_tip1);
-        TextView tv_tip2 = view.findViewById(R.id.tv_tip2);
-        TextView tv_tip3 = view.findViewById(R.id.tv_tip3);
+        iv_car = view.findViewById(R.id.iv_car);
+        view.getViewTreeObserver().addOnGlobalLayoutListener(this::startCarAnimation);
 
     }
 
@@ -129,6 +133,18 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
             navController.navigate(R.id.action_homePageFragment_to_LoginFragment);
         }
 
+    }
+
+    private void startCarAnimation() {
+        ConstraintLayout parentLayout = (ConstraintLayout) iv_car.getParent();
+        int screenWidth = parentLayout.getWidth();
+        int carWidth = iv_car.getWidth(); // Get the car's width
+
+        ObjectAnimator animator = ObjectAnimator.ofFloat(iv_car, "translationX", -carWidth, screenWidth);
+        animator.setDuration(5000); // Time for car to move across
+        animator.setRepeatCount(ValueAnimator.INFINITE); // Infinite loop
+        animator.setRepeatMode(ValueAnimator.RESTART);
+        animator.start();
     }
 
 }

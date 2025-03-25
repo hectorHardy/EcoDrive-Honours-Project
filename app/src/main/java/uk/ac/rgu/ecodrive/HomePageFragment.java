@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -93,11 +94,21 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
         }
 
         //for navigating to the record page
-        Button btn_recipes = view.findViewById(R.id.btn_record_drive_page);
-        btn_recipes.setOnClickListener(this);
+        Button btn_record_drive_page = view.findViewById(R.id.btn_record_drive_page);
+        btn_record_drive_page.setOnClickListener(this);
 
         Button btn_logout = getView().findViewById(R.id.btn_logout);
         btn_logout.setOnClickListener(this);
+
+        ViewFlipper vf_tips = view.findViewById(R.id.vf_tips);
+        vf_tips.setFlipInterval(10000); // 10 seconds interval
+        vf_tips.setInAnimation(getContext(), android.R.anim.slide_in_left);
+        vf_tips.setOutAnimation(getContext(), android.R.anim.slide_out_right);
+        vf_tips.startFlipping();
+
+        TextView tv_tip1 = view.findViewById(R.id.tv_tip1);
+        TextView tv_tip2 = view.findViewById(R.id.tv_tip2);
+        TextView tv_tip3 = view.findViewById(R.id.tv_tip3);
 
     }
 

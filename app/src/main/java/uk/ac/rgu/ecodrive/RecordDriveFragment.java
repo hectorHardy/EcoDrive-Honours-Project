@@ -13,11 +13,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -64,9 +61,7 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
     private TextView txt_accX;
     private TextView txt_accY;
     private TextView txt_accZ;
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private FusedLocationProviderClient fusedLocationClient;
-    private LocationRequest locationRequest; // check correct import
     private LocationCallback locationCallback;
     private List<LocationData> locationList = new ArrayList<>(); // Store recorded locations
 
@@ -195,7 +190,9 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
 
     private void startLocationUpdates() {
         // Create LocationRequest using LocationRequest.Builder with the new Priority enum
-        locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 2000)
+        // Optional: Set the max wait time
+        // check correct import
+        LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 2000)
                 .setMinUpdateIntervalMillis(1000)  // Optional: Set the max wait time
                 .build();
 

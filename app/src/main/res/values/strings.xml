@@ -31,4 +31,11 @@
     <string name="btn_signUp">Sign Up</string>
     <string name="txt_loginHere">click here to login</string>
 
+    <!-- Leaderboards page -->
+    <string name="tv_userName">Username</string>
+    <string name="tv_score">Score</string>
+
+    <!-- Rewards page -->
+    <string name="tv_reward1">£75 off car insurance policy</string>
+
 </resources>

@@ -1,19 +1,13 @@
 package uk.ac.rgu.ecodrive;
 
-
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.Manifest;
-
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -22,10 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-
 import android.os.Looper;
-import android.os.PowerManager;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +25,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -42,10 +32,10 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 
-
-import java.util.ArrayList;
+import java.text.DecimalFormat;
 import java.util.List;
-
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,7 +43,6 @@ import retrofit2.Response;
 import uk.ac.rgu.ecodrive.api.OverpassApiService;
 import uk.ac.rgu.ecodrive.api.RetrofitClient;
 import uk.ac.rgu.ecodrive.models.OverpassResponse;
-import uk.ac.rgu.ecodrive.models.LocationData;
 
 
 /**
@@ -79,8 +68,18 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
     private TextView txt_accZ;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
-    private List<LocationData> locationList = new ArrayList<>(); // Store recorded locations
-
+    private double[] location_temp = new double[3];
+    private int speedingCount, idleCount, accelerationCount = 0;
+    private boolean isRunning = false;
+    private long startTime, endTime;
+    private ExecutorService executorService;
+    private long totalTime;
+    private final double IDLESPEED = 1.5;
+    private final double ACCELERATIONLIMIT = 10;
+    private double driveScore;
+    private final double WEIGHTSPEED = 10;
+    private final double WEIGHTIDLE = 3;
+    private final double WEIGHTACC = 5;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -142,10 +141,7 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
                 != PackageManager.PERMISSION_GRANTED) {
             // Request permission using Activity Result API
             locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
-        } else {
-            //startLocationUpdates();
         }
-
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_record_drive, container, false);
@@ -157,6 +153,8 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
+
+        executorService = Executors.newSingleThreadExecutor();
 
         //for initiating recording
         btn_record = view.findViewById(R.id.btn_record);
@@ -190,13 +188,16 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
                 Log.d("RecordDriveFragment", "Recording Started");
                 sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
                 startLocationUpdates();
+                startTimer();
             } else {
                 btn_record.setText(getString(R.string.btn_record_start));
                 Log.d("RecordDriveFragment", "Recording Stopped");
                 sensorManager.unregisterListener(this);
                 stopLocationUpdates();
-                Log.d("locationList", locationList.toString());
-                fetchSpeedLimits();
+                stopTimer();
+                totalTime = (endTime - startTime)/1000;
+                Log.d("TOTAL", "number of times speeding: " + speedingCount + ". drive time: " + totalTime + " seconds" + ". Idle count: " + idleCount + ". acceleration faults: " + accelerationCount);
+                calculateScore();
             }
 
 
@@ -211,8 +212,11 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
             float y = event.values[1];
             float z = event.values[2];
 
-
             double acceleration = Math.sqrt(x*x + y*y + z*z);
+            if(acceleration > ACCELERATIONLIMIT){
+                accelerationCount++;
+                Log.d("ACCELERATION", "" + acceleration);
+            }
             txt_accX.setText(String.format("acceleration: %.2f m/s²", acceleration));
         }
     }
@@ -227,11 +231,7 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
 
     private void startLocationUpdates() {
         // Create LocationRequest using LocationRequest.Builder with the new Priority enum
-        LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_BALANCED_POWER_ACCURACY, 300).build();
-
-
-        Log.d("update", "check 1,2,1,2");
-
+        LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000).build();
 
         // Set up a LocationCallback to handle location updates
         locationCallback = new LocationCallback() {
@@ -239,31 +239,31 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
             public void onLocationResult(@NonNull LocationResult locationResult) {
                 Log.d("LocationUpdates", "Location count: " + locationResult.getLocations().size());
 
-                Log.d("LocationUpdates", "Received location update!");
-                if (locationResult == null) {
-                    Log.d("LocationUpdates", "LocationResult is null");
-                    return;
-                }
                 for (Location location : locationResult.getLocations()) {
                     if (location != null) {
-                        float speed = location.getSpeed(); // Speed in meters/second
-                        float speedKmh = speed * 3.6f; // Convert to km/h
+                        double speed = location.getSpeed(); // Speed in meters/second
+                        if(speed < IDLESPEED){
+                            idleCount++;
+                        }
+                        double speedMph = speed * 2.23694; // Convert to km/h
                         double latitude = location.getLatitude();
                         double longitude = location.getLongitude();
 
-
                         // Save location to list
-                        locationList.add(new LocationData(latitude, longitude, speedKmh));
-
+                        location_temp[0] = latitude;
+                        location_temp[1] = longitude;
+                        location_temp[2] = speedMph;
 
                         // Log & Display Location Data
                         Log.d("Location", "Lat: " + latitude + ", Lng: " + longitude);
-                        Log.d("Speed", "Current Speed: " + speedKmh + " km/h");
+                        Log.d("Speed", "Current Speed: " + speedMph + " mph");
 
 
                         // Update UI with current speed
-                        txt_accY.setText("Speed: " + speedKmh + " km/h");
+                        txt_accY.setText("Speed: " + speedMph + " mph");
                         txt_accZ.setText("Lat: " + latitude + ", Lng: " + longitude);
+
+                        fetchSpeedLimits();
                     }
                 }
             }
@@ -285,61 +285,62 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
     }
 
 
-
-
     private void fetchSpeedLimits() {
-        if (locationList.isEmpty()) {
-            Log.d("SpeedLimit", "No locations available to fetch speed limits.");
-            return;
-        }
+        StringBuilder query = new StringBuilder("[out:json];("); // Start query
+
+        // Add each location to the query
+
+        double lat = location_temp[0];
+        double lon = location_temp[1];
+        query.append("way(around:20,").append(lat).append(",").append(lon).append(")[maxspeed];");
 
 
-        // Build the Overpass API Query for Multiple Locations
-        StringBuilder query = new StringBuilder("[out:json];");
-          for (int i = 0; i < locationList.size(); i=i+5 ) {
-            LocationData location = locationList.get(i);
-            double lat = location.getLatitude();
-            double lon = location.getLongitude();
-            query.append("way(around:20,").append(lat).append(",").append(lon).append(")[maxspeed];");
-        }
-        query.append("out;"); // Complete the query
+        query.append("); out tags;"); // End query
 
+        // Log query for debugging
+        Log.d("SpeedLimit", "Query: " + query.toString());
 
         OverpassApiService apiService = RetrofitClient.getClient();
         Call<OverpassResponse> call = apiService.getSpeedLimit(query.toString());
 
-
-        // Log the full query URL before making the request
-        Log.d("SpeedLimit", "Query: " + query.toString());
-
-
         call.enqueue(new Callback<OverpassResponse>() {
             @Override
             public void onResponse(Call<OverpassResponse> call, Response<OverpassResponse> response) {
-                Log.d("SpeedLimit", "Raw Response: " + response.raw()); // Debug raw response
                 if (response.isSuccessful() && response.body() != null) {
                     List<OverpassResponse.Element> elements = response.body().elements;
+
                     if (elements != null && !elements.isEmpty()) {
-                        int z = 0;
-                        for (int i = 0; i < elements.size(); i++) {
-                            OverpassResponse.Element element = elements.get(i);
-                            float speed_temp = locationList.get(z).getSpeed();
+                        for (OverpassResponse.Element element : elements) {
                             if (element.tags != null && element.tags.maxspeed != null) {
-                                Log.d("SpeedLimit", "Location " + (i + 1) + ": " + element.tags.maxspeed + " km/h");
-                                Log.d("SPEED VIOLATION CHECK: ", "limit: " + element.tags.maxspeed + " km/h, actual speed: " + speed_temp);
+                                try {
+                                    // Regular expression to extract numeric part from the string (e.g., "30 mph" -> "30")
+                                    String maxSpeedString = element.tags.maxspeed;
+                                    String numericPart = maxSpeedString.replaceAll("[^0-9.]", "");  // Remove non-numeric characters except for '.'
+
+                                    if (!numericPart.isEmpty()) {
+                                        double maxSpeedValue = Double.parseDouble(numericPart); // Convert to double
+                                        Log.d("SpeedLimit", "Speed Limit (in double): " + maxSpeedValue);
+                                        if(maxSpeedValue < location_temp[2]){
+                                            speedingCount++;
+                                        }
+                                    } else {
+                                        Log.d("SpeedLimit", "Invalid maxspeed format: " + maxSpeedString);
+                                    }
+                                } catch (NumberFormatException e) {
+                                    // Handle the case where the number format is invalid
+                                    Log.d("SpeedLimit", "Invalid number in maxspeed: " + element.tags.maxspeed);
+                                }
                             } else {
-                                Log.d("SpeedLimit", "Location " + (i + 1) + ": No speed limit found");
+                                Log.d("SpeedLimit", "No speed limit found");
                             }
-                            z = z+5;
                         }
                     } else {
-                        Log.d("SpeedLimit", "No speed limit data found for any location");
+                        Log.d("SpeedLimit", "No speed limit data found");
                     }
                 } else {
-                    Log.d("SpeedLimit", "API Response Failed"+ response.errorBody());
+                    Log.d("SpeedLimit", "API Response Failed: " + response.errorBody());
                 }
             }
-
 
             @Override
             public void onFailure(Call<OverpassResponse> call, Throwable t) {
@@ -349,11 +350,42 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
     }
 
 
+    private void startTimer() {
+        isRunning = true;
+        startTime = System.currentTimeMillis();
+
+        executorService.submit(() -> {
+            while (isRunning) {
+                try {
+                    Thread.sleep(1000); // Wait 1 second
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void stopTimer() {
+        isRunning = false;
+        endTime = System.currentTimeMillis();
+        long elapsedTime = (endTime - startTime) / 1000;
+        Log.d("TIMER", "Elapsed Time: " + elapsedTime + " seconds");
+    }
+
     private void stopLocationUpdates() {
         Log.d("SATOPPED", "stopped updates");
         if (fusedLocationClient != null) {
             fusedLocationClient.removeLocationUpdates(locationCallback);
         }
+    }
+
+    private void calculateScore(){
+        DecimalFormat df = new DecimalFormat("#.0");
+        driveScore = 10 - (WEIGHTSPEED*speedingCount/totalTime) - (WEIGHTACC*accelerationCount/totalTime) - (WEIGHTIDLE*idleCount/totalTime);
+        if(driveScore < 0){ driveScore = 0;}
+        driveScore = Double.parseDouble(df.format(driveScore));
+        Log.d("-------SCORE-------", "" + driveScore);
+
     }
 
 

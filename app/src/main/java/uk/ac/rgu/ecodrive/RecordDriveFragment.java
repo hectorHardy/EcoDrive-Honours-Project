@@ -31,9 +31,18 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -43,6 +52,7 @@ import retrofit2.Response;
 import uk.ac.rgu.ecodrive.api.OverpassApiService;
 import uk.ac.rgu.ecodrive.api.RetrofitClient;
 import uk.ac.rgu.ecodrive.models.OverpassResponse;
+import uk.ac.rgu.ecodrive.models.DriveData;
 
 
 /**
@@ -74,6 +84,9 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
     private long startTime, endTime;
     private ExecutorService executorService;
     private long totalTime;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+    private CollectionReference driveScoresRef = db.collection("users").document(userId).collection("driveScores");
     private final double IDLESPEED = 1.5;
     private final double ACCELERATIONLIMIT = 10;
     private double driveScore;
@@ -135,6 +148,9 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+        CollectionReference driveScoresRef = db.collection("users").document(userId).collection("driveScores");
 
         // Check if permission is granted
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
@@ -197,13 +213,23 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
                 stopTimer();
                 totalTime = (endTime - startTime)/1000;
                 Log.d("TOTAL", "number of times speeding: " + speedingCount + ". drive time: " + totalTime + " seconds" + ". Idle count: " + idleCount + ". acceleration faults: " + accelerationCount);
+                String date = getCurrentDate();
                 calculateScore();
+                DriveData driveData = new DriveData(driveScore, date);
+                Log.d("DRIVEDATA", "" + driveData.toString());
+                updateDb(driveData);
             }
 
 
         }
     }
 
+    public String getCurrentDate() {
+        Log.d("date method called successfully", "getCurrentDate:11111111111111 ");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Log.d("DATE ", "date info success");
+        return sdf.format(new Date());
+    }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -388,6 +414,46 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
 
     }
 
+    private void updateDb(DriveData driveData){
+        Log.d("UPDATE DB CALLED SUCCESSFULLY", "updateDb: ");
+        driveScoresRef.add(driveData)
+                .addOnSuccessListener(documentReference -> {
+                    // Successfully added the drive score
+                    Log.d("document reference 234432", "yippe?");
+                    updateTotalPoints(userId);
+                })
+                .addOnFailureListener(e -> {
+                    Log.d("error in updateDb", "updateDb: error");
+                });
+    }
+
+    public void updateTotalPoints(String userId) {
+        // Reference to the user's document
+        DocumentReference userRef = db.collection("users").document(userId);
+
+        // Get all the drive scores for the user
+        CollectionReference driveScoresRef = db.collection("users").document(userId).collection("driveScores");
+
+        // Query all drive scores and calculate the total points
+        driveScoresRef.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            double totalPoints = 0;
+            for (DocumentSnapshot document : queryDocumentSnapshots) {
+                Double score = document.getDouble("score");
+                if (score != null) {
+                    totalPoints += score;
+                }
+            }
+
+            // Update the total points in the user's document
+            userRef.update("totalPoints", totalPoints)
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d("DATABASEUPDATED", "updateTotalPoints: ");
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.d("DATABASEFAIL", "updateTotalPoints: fail");
+                    });
+        });
+    }
 
     @Override
     public void onDestroyView() { //  stop listening for sensor input when fragment is left

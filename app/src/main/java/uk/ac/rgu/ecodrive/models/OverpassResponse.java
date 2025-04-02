@@ -12,4 +12,5 @@ public class OverpassResponse {
     public static class Tags {
         public String maxspeed;
     }
+
 }

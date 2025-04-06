@@ -36,9 +36,11 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -428,13 +430,12 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
     }
 
     public void updateTotalPoints(String userId) {
-        // Reference to the user's document
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference userRef = db.collection("users").document(userId);
+        CollectionReference driveScoresRef = userRef.collection("driveScores");
 
-        // Get all the drive scores for the user
-        CollectionReference driveScoresRef = db.collection("users").document(userId).collection("driveScores");
+        Log.d("DATABASE", "Fetching drive scores for user: " + userId);
 
-        // Query all drive scores and calculate the total points
         driveScoresRef.get().addOnSuccessListener(queryDocumentSnapshots -> {
             double totalPoints = 0;
             for (DocumentSnapshot document : queryDocumentSnapshots) {
@@ -444,16 +445,19 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
                 }
             }
 
-            // Update the total points in the user's document
-            userRef.update("totalPoints", totalPoints)
-                    .addOnSuccessListener(aVoid -> {
-                        Log.d("DATABASEUPDATED", "updateTotalPoints: ");
-                    })
-                    .addOnFailureListener(e -> {
-                        Log.d("DATABASEFAIL", "updateTotalPoints: fail");
-                    });
+            Log.d("DATABASE", "Total Points Calculated: " + totalPoints);
+
+            // 🔥 Use set() with merge to ensure document is created if missing
+            double finalTotalPoints = totalPoints;
+            userRef.set(Collections.singletonMap("totalPoints", totalPoints), SetOptions.merge())
+                    .addOnSuccessListener(aVoid -> Log.d("DATABASEUPDATED", "Total Points Updated: " + finalTotalPoints))
+                    .addOnFailureListener(e -> Log.e("DATABASEFAIL", "Failed to update total points", e));
+
+        }).addOnFailureListener(e -> {
+            Log.e("DATABASEFAIL", "Failed to fetch drive scores", e);
         });
     }
+
 
     @Override
     public void onDestroyView() { //  stop listening for sensor input when fragment is left

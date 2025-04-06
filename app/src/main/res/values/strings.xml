@@ -18,7 +18,7 @@
     <!-- Record Drive Page -->
     <string name="btn_record_start">Start Journey</string>
     <string name="btn_record_end">End Journey</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Login Page -->
@@ -32,10 +32,17 @@
     <string name="txt_loginHere">click here to login</string>
 
     <!-- Leaderboards page -->
+    <string name="tv_position">1</string>
     <string name="tv_userName">Username</string>
     <string name="tv_score">Score</string>
 
     <!-- Rewards page -->
-    <string name="tv_reward1">£75 off car insurance policy</string>
+    <string name="tv_reward1">£75 off insurance</string>
+    <string name="tv_reward2">10% off tyres</string>
+    <string name="tv_reward3">10% off car hire</string>
+    <string name="tv_reward4">10% off service</string>
+
+    <!-- History Page -->
+    <string name="tv_driveDate">00/00/0000</string>
 
 </resources>

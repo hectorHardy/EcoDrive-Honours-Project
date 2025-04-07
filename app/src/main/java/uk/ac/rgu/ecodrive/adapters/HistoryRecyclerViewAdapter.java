@@ -1,4 +1,4 @@
-package uk.ac.rgu.ecodrive.models;
+package uk.ac.rgu.ecodrive.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import uk.ac.rgu.ecodrive.R;
+import uk.ac.rgu.ecodrive.models.DriveData;
 
 public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecyclerViewAdapter.HistoryViewHolder>{
     private Context context;
@@ -43,7 +44,7 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
         TextView tv_date = holder.itemView.findViewById(R.id.tv_driveDate);
         tv_date.setText(driveData.getDate());
 
-        TextView tv_score = holder.itemView.findViewById(R.id.tv_score);
+        TextView tv_score = holder.itemView.findViewById(R.id.tv_totalScore);
         tv_score.setText(String.valueOf(driveData.getScore()));
     }
 

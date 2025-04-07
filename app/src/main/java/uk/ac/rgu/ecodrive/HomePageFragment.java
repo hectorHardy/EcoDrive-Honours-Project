@@ -108,6 +108,9 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
         Button btn_history = getView().findViewById(R.id.btn_history);
         btn_history.setOnClickListener(this);
 
+        Button btn_leaderboards = getView().findViewById(R.id.btn_leaderbaords);
+        btn_leaderboards.setOnClickListener(this);
+
         ViewFlipper vf_tips = view.findViewById(R.id.vf_tips);
         vf_tips.setFlipInterval(10000); // 10 seconds interval
         vf_tips.setInAnimation(getContext(), android.R.anim.slide_in_left);
@@ -134,8 +137,8 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
         } else if (v.getId() == R.id.btn_logout){
             FirebaseAuth.getInstance().signOut();
             navController.navigate(R.id.action_homePageFragment_to_LoginFragment);
-        } else if (v.getId() == R.id.btn_history){
-            navController.navigate(R.id.action_homePageFragment_to_historyFragment);
+        } else if (v.getId() == R.id.btn_leaderbaords){
+            navController.navigate(R.id.action_homePageFragment_to_leaderboardFragment);
         }
 
     }

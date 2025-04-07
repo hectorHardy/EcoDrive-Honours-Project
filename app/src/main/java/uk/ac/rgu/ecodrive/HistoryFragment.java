@@ -20,12 +20,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 import uk.ac.rgu.ecodrive.models.DriveData;
 import uk.ac.rgu.ecodrive.models.DriveHistoryCallback;
-import uk.ac.rgu.ecodrive.models.HistoryRecyclerViewAdapter;
+import uk.ac.rgu.ecodrive.adapters.HistoryRecyclerViewAdapter;
 
 /**
  * A simple {@link Fragment} subclass.

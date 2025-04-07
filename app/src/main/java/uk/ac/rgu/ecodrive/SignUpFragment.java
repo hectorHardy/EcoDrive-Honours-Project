@@ -138,9 +138,7 @@ public class SignUpFragment extends Fragment {
 
                                 Toast.makeText(getContext(), "Account Created", Toast.LENGTH_SHORT);
 
-                                // Sign in success, update UI with the signed-in user's information
-                                //                            Log.d("SIGN IN", "signInWithEmail:success");
-                                //                            FirebaseUser user = mAuth.getCurrentUser();
+                                navController.navigate(R.id.action_SignUpFragment_to_homePageFragment);
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w("SIGN IN", "signInWithEmail:failure", task.getException());

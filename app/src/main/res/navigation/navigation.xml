@@ -19,6 +19,12 @@
         <action
             android:id="@+id/action_homePageFragment_to_LoginFragment"
             app:destination="@id/LoginFragment" />
+        <action
+            android:id="@+id/action_homePageFragment_to_rewardsFragment"
+            app:destination="@id/rewardsFragment" />
+        <action
+            android:id="@+id/action_homePageFragment_to_leaderboardFragment"
+            app:destination="@id/leaderboardFragment" />
     </fragment>
     <fragment
         android:id="@+id/historyFragment"
@@ -50,5 +56,18 @@
         <action
             android:id="@+id/action_SignUpFragment_to_LoginFragment"
             app:destination="@id/LoginFragment" />
+        <action
+            android:id="@+id/action_SignUpFragment_to_homePageFragment"
+            app:destination="@id/homePageFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/rewardsFragment"
+        android:name="uk.ac.rgu.ecodrive.RewardsFragment"
+        android:label="fragment_rewards"
+        tools:layout="@layout/fragment_rewards" />
+    <fragment
+        android:id="@+id/leaderboardFragment"
+        android:name="uk.ac.rgu.ecodrive.LeaderboardFragment"
+        android:label="fragment_leaderboard"
+        tools:layout="@layout/fragment_leaderboard" />
 </navigation>

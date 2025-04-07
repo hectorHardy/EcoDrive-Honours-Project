@@ -34,7 +34,10 @@
     <!-- Leaderboards page -->
     <string name="tv_position">1</string>
     <string name="tv_userName">Username</string>
-    <string name="tv_score">Score</string>
+    <string name="tv_totalScore">0</string>
+    <string name="tv_totalTitle">Total Score</string>
+    <string name="tv_userTitle">User Name</string>
+    <string name="tv_posTitle">Position</string>
 
     <!-- Rewards page -->
     <string name="tv_reward1">£75 off insurance</string>
@@ -44,5 +47,7 @@
 
     <!-- History Page -->
     <string name="tv_driveDate">00/00/0000</string>
+    <string name="tv_dateTitle">Drive Date</string>
+    <string name="tv_scoreTitle">Drive Score</string>
 
 </resources>

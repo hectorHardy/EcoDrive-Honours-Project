@@ -1,5 +1,6 @@
 package uk.ac.rgu.ecodrive;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,6 +42,8 @@ public class HistoryFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private double average = 0;
 
     public HistoryFragment() {
         // Required empty public constructor
@@ -83,6 +87,8 @@ public class HistoryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        TextView tv_avgScore = getView().findViewById(R.id.tv_avgScore);
+
         getHistory(new DriveHistoryCallback() {
             @Override
             public void onHistoryLoaded(ArrayList<DriveData> driveHistory) {
@@ -92,6 +98,10 @@ public class HistoryFragment extends Fragment {
                 rv.setLayoutManager(new LinearLayoutManager(getContext()));
                 RecyclerView.Adapter adapter = new HistoryRecyclerViewAdapter(getContext(), driveHistory); // sends list of drives to be displayed on recycler view
                 rv.setAdapter(adapter);
+                Log.d("AVERAGE  ", "average: " + average);
+                average = average/driveHistory.size();
+                @SuppressLint("DefaultLocale") String formattedAverage = String.format("%.2f", average);
+                tv_avgScore.setText(formattedAverage);
 
             }
 
@@ -119,6 +129,7 @@ public class HistoryFragment extends Fragment {
                             Double score = document.getDouble("score");
                             String date = document.getString("date");
                             driveHistory.add(new DriveData(score != null ? score : 0, date != null ? date : ""));
+                            average += (score != null ? score : 0);
                         }
 
                         callback.onHistoryLoaded(driveHistory);

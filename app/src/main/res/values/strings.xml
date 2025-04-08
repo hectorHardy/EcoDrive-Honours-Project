@@ -56,5 +56,7 @@
     <string name="tv_driveDate">00/00/0000</string>
     <string name="tv_dateTitle">Drive Date</string>
     <string name="tv_scoreTitle">Drive Score</string>
+    <string name="tv_avgTitle">Average:</string>
+
 
 </resources>

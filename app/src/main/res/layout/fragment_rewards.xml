@@ -190,5 +190,14 @@
         app:layout_constraintStart_toStartOf="@+id/pb_reward4"
         app:layout_constraintTop_toBottomOf="@+id/pb_reward4" />
 
+    <TextView
+        android:id="@+id/tv_displayTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -89,6 +89,8 @@ public class RewardsFragment extends Fragment implements View.OnClickListener{
         Button btn_reward3 = getView().findViewById(R.id.btn_reward3);
         Button btn_reward4 = getView().findViewById(R.id.btn_reward4);
 
+        TextView tv_displaytotal = getView().findViewById(R.id.tv_displayTotal);
+
         btn_reward1.setOnClickListener(this);
         btn_reward2.setOnClickListener(this);
         btn_reward3.setOnClickListener(this);
@@ -96,13 +98,15 @@ public class RewardsFragment extends Fragment implements View.OnClickListener{
 
         getTotalPoints(total -> {
             Log.d("USER_SCORE", "User has total points: " + total);
+
+            tv_displaytotal.setText("Total points: " + total);
+
             pb_reward1.setProgress((int)total);
             pb_reward2.setProgress((int)total);
             pb_reward3.setProgress((int)total);
             pb_reward4.setProgress((int)total);
 
             if(total >= pb_reward1.getMax()){
-                Log.d("TOTAL CHECKL", "onViewCreated: " + total);
                 btn_reward1.setVisibility(View.VISIBLE);
             }
             if(total >= pb_reward2.getMax()){

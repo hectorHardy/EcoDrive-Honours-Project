@@ -45,6 +45,13 @@
     <string name="tv_reward3">10% off car hire</string>
     <string name="tv_reward4">10% off service</string>
 
+    <string name="btn_reward1">use VOUCHERCODES75 at marshmallow.com</string>
+    <string name="btn_reward2">use PGB10 at National.co.uk</string>
+    <string name="btn_reward3">use HAPPYBD10 at Europcar.co.uk</string>
+    <string name="btn_reward4">use START-SERV-10 at Halfords.co.uk</string>
+
+    <string name="btn_seeReward">see reward</string>
+
     <!-- History Page -->
     <string name="tv_driveDate">00/00/0000</string>
     <string name="tv_dateTitle">Drive Date</string>

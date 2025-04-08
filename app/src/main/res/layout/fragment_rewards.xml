@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:visibility="visible"
     tools:context=".RewardsFragment">
 
     <ImageView
@@ -83,11 +84,12 @@
         android:id="@+id/tv_reward3"
         android:layout_width="126dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="112dp"
         android:text="@string/tv_reward3"
         android:textAlignment="center"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/pb_reward1"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/pb_reward1"
         app:layout_constraintTop_toBottomOf="@+id/pb_reward1" />
 
@@ -116,14 +118,13 @@
         android:id="@+id/tv_reward4"
         android:layout_width="126dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
         android:text="@string/tv_reward4"
         android:textAlignment="center"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_reward3"
         app:layout_constraintEnd_toEndOf="@+id/pb_reward2"
-        app:layout_constraintStart_toStartOf="@+id/pb_reward2"
-        app:layout_constraintTop_toBottomOf="@+id/pb_reward2" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/pb_reward2" />
 
     <ImageView
         android:id="@+id/imageView4"
@@ -147,6 +148,47 @@
         app:layout_constraintEnd_toEndOf="@+id/imageView4"
         app:layout_constraintStart_toStartOf="@+id/imageView4"
         app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+
+    <Button
+        android:id="@+id/btn_reward1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_seeReward"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/pb_reward1"
+        app:layout_constraintHorizontal_bias="0.531"
+        app:layout_constraintStart_toStartOf="@+id/pb_reward1"
+        app:layout_constraintTop_toBottomOf="@+id/pb_reward1" />
+
+    <Button
+        android:id="@+id/btn_reward2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_seeReward"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/pb_reward2"
+        app:layout_constraintStart_toStartOf="@+id/pb_reward2"
+        app:layout_constraintTop_toBottomOf="@+id/pb_reward2" />
+
+    <Button
+        android:id="@+id/btn_reward3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_seeReward"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/pb_reward3"
+        app:layout_constraintStart_toStartOf="@+id/pb_reward3"
+        app:layout_constraintTop_toBottomOf="@+id/pb_reward3" />
+
+    <Button
+        android:id="@+id/btn_reward4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_seeReward"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/pb_reward4"
+        app:layout_constraintStart_toStartOf="@+id/pb_reward4"
+        app:layout_constraintTop_toBottomOf="@+id/pb_reward4" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

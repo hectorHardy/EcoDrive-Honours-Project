@@ -111,6 +111,9 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
         Button btn_leaderboards = getView().findViewById(R.id.btn_leaderbaords);
         btn_leaderboards.setOnClickListener(this);
 
+        Button btn_rewards = getView().findViewById(R.id.btn_rewards);
+        btn_rewards.setOnClickListener(this);
+
         ViewFlipper vf_tips = view.findViewById(R.id.vf_tips);
         vf_tips.setFlipInterval(10000); // 10 seconds interval
         vf_tips.setInAnimation(getContext(), android.R.anim.slide_in_left);
@@ -139,6 +142,8 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
             navController.navigate(R.id.action_homePageFragment_to_LoginFragment);
         } else if (v.getId() == R.id.btn_leaderbaords){
             navController.navigate(R.id.action_homePageFragment_to_leaderboardFragment);
+        } else if (v.getId() == R.id.btn_rewards){
+            navController.navigate(R.id.action_homePageFragment_to_rewardsFragment);
         }
 
     }

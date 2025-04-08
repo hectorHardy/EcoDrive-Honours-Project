@@ -118,7 +118,7 @@ public class LeaderboardFragment extends Fragment {
                     // Loop through the results and create a User object for each
                     for (DocumentSnapshot document : queryDocumentSnapshots) {
                         String userId = document.getId(); // User ID
-                        double totalPoints = document.getDouble("totalPoints"); // Get the totalPoints
+                        double totalPoints = Math.round(document.getDouble("totalPoints")); // Get the totalPoints
 
                         // Add the user to the leaderboard list
                         leaderboard.add(new UserData(totalPoints, userId));

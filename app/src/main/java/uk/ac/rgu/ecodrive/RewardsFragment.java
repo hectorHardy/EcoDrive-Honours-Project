@@ -89,7 +89,7 @@ public class RewardsFragment extends Fragment implements View.OnClickListener{
         Button btn_reward3 = getView().findViewById(R.id.btn_reward3);
         Button btn_reward4 = getView().findViewById(R.id.btn_reward4);
 
-        TextView tv_displaytotal = getView().findViewById(R.id.tv_displayTotal);
+        TextView tv_displayTotal = getView().findViewById(R.id.tv_displayTotal);
 
         btn_reward1.setOnClickListener(this);
         btn_reward2.setOnClickListener(this);
@@ -99,7 +99,7 @@ public class RewardsFragment extends Fragment implements View.OnClickListener{
         getTotalPoints(total -> {
             Log.d("USER_SCORE", "User has total points: " + total);
 
-            tv_displaytotal.setText("Total points: " + total);
+            tv_displayTotal.setText("Total points: " + Math.round(total));
 
             pb_reward1.setProgress((int)total);
             pb_reward2.setProgress((int)total);

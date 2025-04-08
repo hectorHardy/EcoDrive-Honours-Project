@@ -22,6 +22,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,6 +80,7 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
     private TextView txt_accX;
     private TextView txt_accY;
     private TextView txt_accZ;
+    private Switch sw_startStop;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
     private double[] location_temp = new double[3];
@@ -178,6 +181,7 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
         btn_record = view.findViewById(R.id.btn_record);
         btn_record.setOnClickListener(this);
 
+        sw_startStop = view.findViewById(R.id.sw_startStop);
 
         txt_accX = view.findViewById(R.id.txt_accX);
         txt_accY = view.findViewById(R.id.txt_accY);
@@ -409,7 +413,13 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
 
     private void calculateScore(){
         DecimalFormat df = new DecimalFormat("#.0");
-        driveScore = 10 - (WEIGHTSPEED*speedingCount/totalTime) - (WEIGHTACC*accelerationCount/totalTime) - (WEIGHTIDLE*idleCount/totalTime);
+
+        if(sw_startStop.isChecked()){
+            driveScore = 10 - (WEIGHTSPEED*speedingCount/totalTime) - (WEIGHTACC*accelerationCount/totalTime);
+        } else{
+            driveScore = 10 - (WEIGHTSPEED*speedingCount/totalTime) - (WEIGHTACC*accelerationCount/totalTime) - (WEIGHTIDLE*idleCount/totalTime);
+        }
+
         if(driveScore < 0){ driveScore = 0;}
         driveScore = Double.parseDouble(df.format(driveScore));
         Log.d("-------SCORE-------", "" + driveScore);

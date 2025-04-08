@@ -19,7 +19,7 @@
     <string name="btn_record_start">Start Journey</string>
     <string name="btn_record_end">End Journey</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sw_startStop">enable start/stop mode</string>
 
     <!-- Login Page -->
     <string name="txtIn_username">Username</string>

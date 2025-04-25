@@ -87,17 +87,18 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
     private int speedingCount, idleCount, accelerationCount = 0;
     private boolean isRunning = false;
     private long startTime, endTime;
-    private ExecutorService executorService;
     private long totalTime;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
     private CollectionReference driveScoresRef = db.collection("users").document(userId).collection("driveScores");
     private final double IDLESPEED = 1.5;
-    private final double ACCELERATIONLIMIT = 10;
+    private final double ACCELERATIONLIMIT = 8;
     private double driveScore;
     private final double WEIGHTSPEED = 10;
     private final double WEIGHTIDLE = 3;
     private final double WEIGHTACC = 5;
+    private static final long COOLDOWN = 2000; // 2 seconds
+    private long lastAccelerationTime = 0;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -153,9 +154,9 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-        CollectionReference driveScoresRef = db.collection("users").document(userId).collection("driveScores");
+        FirebaseFirestore db = FirebaseFirestore.getInstance(); //get database instance
+        String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(); //get userID
+        CollectionReference driveScoresRef = db.collection("users").document(userId).collection("driveScores"); // specific reference to the driveScores collection for saving recorded drive data to.
 
         // Check if permission is granted
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
@@ -174,8 +175,6 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
-
-        executorService = Executors.newSingleThreadExecutor();
 
         //initialise views
         btn_record = view.findViewById(R.id.btn_record);
@@ -245,9 +244,12 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
             float z = event.values[2];
 
             double acceleration = Math.sqrt(x*x + y*y + z*z);
-            if(acceleration > ACCELERATIONLIMIT){
+            long currentTime = System.currentTimeMillis();
+
+            if (acceleration > ACCELERATIONLIMIT && (currentTime - lastAccelerationTime > COOLDOWN)) {
                 accelerationCount++;
-                Log.d("ACCELERATION", "" + acceleration);
+                lastAccelerationTime = currentTime;
+                Log.d("ACCELERATION", "High acceleration detected: " + acceleration);
             }
             txt_accX.setText(String.format("acceleration: %.2f m/s²", acceleration));
         }
@@ -385,16 +387,6 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
     private void startTimer() {
         isRunning = true;
         startTime = System.currentTimeMillis();
-
-        executorService.submit(() -> { //run in background
-            while (isRunning) {
-                try { // not doing anything, yet...
-                    Thread.sleep(1000); // Wait 1 second
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
     private void stopTimer() {

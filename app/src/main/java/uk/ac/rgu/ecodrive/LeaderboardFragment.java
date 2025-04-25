@@ -125,7 +125,7 @@ public class LeaderboardFragment extends Fragment {
                     }
 
                     callback.onUserDataLoaded(leaderboard);
-                    // Now you have the leaderboard in descending order of totalPoints
+
                     Log.d("LEADERBOARD", "Top users: " + leaderboard);
 
                     // You can now use the leaderboard list to update your UI (e.g., RecyclerView)

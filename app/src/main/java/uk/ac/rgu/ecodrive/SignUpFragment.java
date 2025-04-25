@@ -159,7 +159,7 @@ public class SignUpFragment extends Fragment {
                                     }
 
                                     FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                    UserProfile userProfile = new UserProfile(username);
+                                    UserProfile userProfile = new UserProfile(username); // set username on sign up
 
                                     db.collection("users").document(userId)
                                             .set(userProfile, SetOptions.merge())

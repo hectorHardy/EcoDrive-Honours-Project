@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,7 +33,7 @@ import com.google.firebase.auth.FirebaseUser;
  */
 public class LoginFragment extends Fragment{
 
-    EditText txtIn_username, txtIn_password;
+    EditText txtIn_email, txtIn_password;
     Button btn_login;
     ProgressBar pgBar_login;
     TextView txt_signUpHere;
@@ -110,13 +109,14 @@ public class LoginFragment extends Fragment{
 
         super.onViewCreated(view, savedInstanceState);
 
-        txtIn_username = view.findViewById(R.id.txtIn_username);
+        // initialise all views
+        txtIn_email = view.findViewById(R.id.txtIn_email);
         txtIn_password = view.findViewById(R.id.txtIn_password);
         btn_login = view.findViewById(R.id.btn_login);
         pgBar_login = view.findViewById(R.id.pgBar_login);
         txt_signUpHere = view.findViewById(R.id.txt_signUpHere);
 
-        btn_login.setOnClickListener(this::onClick);
+        btn_login.setOnClickListener(this::onClick); // set listener for buttons
         txt_signUpHere.setOnClickListener(this::onClick);
 
     }
@@ -127,11 +127,11 @@ public class LoginFragment extends Fragment{
 
         if(v.getId() == R.id.btn_login){
             pgBar_login.setVisibility(View.VISIBLE);
-            String username, password;
-            username = String.valueOf(txtIn_username.getText());
+            String email, password;
+            email = String.valueOf(txtIn_email.getText());
             password = String.valueOf(txtIn_password.getText());
 
-            if (TextUtils.isEmpty(username)) {
+            if (TextUtils.isEmpty(email)) {
                 Toast.makeText(getContext(), "enter username", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -141,7 +141,7 @@ public class LoginFragment extends Fragment{
                 return;
             }
 
-            mAuth.signInWithEmailAndPassword(username, password)
+            mAuth.signInWithEmailAndPassword(email, password) //attempt to sign in with details provided
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {

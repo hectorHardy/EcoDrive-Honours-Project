@@ -27,6 +27,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+
+import uk.ac.rgu.ecodrive.models.UserProfile;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,7 +39,7 @@ import com.google.firebase.auth.FirebaseUser;
  */
 public class SignUpFragment extends Fragment {
 
-    EditText txtIn_username, txtIn_password;
+    EditText txtIn_email, txtIn_password, txtIn_displayName;
     Button btn_signUp;
     ProgressBar pgBar_signUp;
     TextView txt_loginHere;
@@ -75,7 +79,7 @@ public class SignUpFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance(); // initialise firebase auth
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -94,8 +98,9 @@ public class SignUpFragment extends Fragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        txtIn_username = view.findViewById(R.id.txtIn_username);
+        txtIn_email = view.findViewById(R.id.txtIn_email);
         txtIn_password = view.findViewById(R.id.txtIn_password);
+        txtIn_displayName = view.findViewById(R.id.txtIn_displayName);
         btn_signUp = view.findViewById(R.id.btn_signUp);
         pgBar_signUp = view.findViewById(R.id.pgBar_signUp);
         txt_loginHere = view.findViewById(R.id.txt_loginHere);
@@ -114,12 +119,13 @@ public class SignUpFragment extends Fragment {
             navController.navigate(R.id.action_SignUpFragment_to_LoginFragment);
         }else if(v.getId() == R.id.btn_signUp) {
 
-            pgBar_signUp.setVisibility(View.VISIBLE);
-            String username, password;
-            username = String.valueOf(txtIn_username.getText());
+            pgBar_signUp.setVisibility(View.VISIBLE); // display progress bar
+            String email, password;
+            email = String.valueOf(txtIn_email.getText());
             password = String.valueOf(txtIn_password.getText());
+            String username = String.valueOf(txtIn_displayName.getText()).trim();
 
-            if (TextUtils.isEmpty(username)) {
+            if (TextUtils.isEmpty(email)) { //popup alert if sign up field is blank
                 Toast.makeText(getContext(), "enter username", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -129,16 +135,45 @@ public class SignUpFragment extends Fragment {
                 return;
             }
 
-            mAuth.createUserWithEmailAndPassword(username, password)
+            if (TextUtils.isEmpty(username)) {
+                username = "Anonymous";
+            }
+
+            mAuth.createUserWithEmailAndPassword(email, password) //attempts to create account with details provided.
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            pgBar_signUp.setVisibility(View.GONE);
+                            pgBar_signUp.setVisibility(View.GONE); // hide progress bar
                             if (task.isSuccessful()) {
 
-                                Toast.makeText(getContext(), "Account Created", Toast.LENGTH_SHORT);
+                                Toast.makeText(getContext(), "Account Created", Toast.LENGTH_SHORT).show();
 
-                                navController.navigate(R.id.action_SignUpFragment_to_homePageFragment);
+                                FirebaseUser user = mAuth.getCurrentUser();
+
+                                if (user != null) {
+                                    String userId = user.getUid();
+                                    String username = txtIn_displayName.getText().toString().trim();
+
+                                    if (username.isEmpty()) {
+                                        username = "Anonymous";
+                                    }
+
+                                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                    UserProfile userProfile = new UserProfile(username);
+
+                                    db.collection("users").document(userId)
+                                            .set(userProfile, SetOptions.merge())
+                                            .addOnSuccessListener(aVoid -> {
+                                                Log.d("SIGNUP", "Username saved.");
+                                                navController.navigate(R.id.action_SignUpFragment_to_homePageFragment);
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                Log.e("SIGNUP_FAIL", "Failed to save username", e);
+                                                Toast.makeText(getContext(), "Error saving user info.", Toast.LENGTH_SHORT).show();
+                                            });
+                                }
+
+                                navController.navigate(R.id.action_SignUpFragment_to_homePageFragment); // on successful sign up, navigate to the home page, logged in
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w("SIGN IN", "signInWithEmail:failure", task.getException());

@@ -7,6 +7,19 @@
     tools:context=".SignUpFragment">
 
     <EditText
+        android:id="@+id/txtIn_displayName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:hint="@string/txtIn_displayName"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="@+id/txtIn_email"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/txtIn_email"
+        app:layout_constraintTop_toBottomOf="@+id/txtIn_password" />
+
+    <EditText
         android:id="@+id/txtIn_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,17 +27,17 @@
         android:ems="10"
         android:hint="@string/txtIn_password"
         android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="@+id/txtIn_username"
-        app:layout_constraintStart_toStartOf="@+id/txtIn_username"
-        app:layout_constraintTop_toBottomOf="@+id/txtIn_username" />
+        app:layout_constraintEnd_toEndOf="@+id/txtIn_email"
+        app:layout_constraintStart_toStartOf="@+id/txtIn_email"
+        app:layout_constraintTop_toBottomOf="@+id/txtIn_email" />
 
     <EditText
-        android:id="@+id/txtIn_username"
+        android:id="@+id/txtIn_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="68dp"
         android:ems="10"
-        android:hint="@string/txtIn_username"
+        android:hint="@string/txtIn_email"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -35,11 +48,13 @@
         android:id="@+id/btn_signUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="280dp"
         android:text="@string/btn_signUp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/txtIn_password"
         app:layout_constraintStart_toStartOf="@+id/txtIn_password"
-        app:layout_constraintTop_toBottomOf="@+id/txtIn_password" />
+        app:layout_constraintTop_toBottomOf="@+id/txtIn_displayName"
+        app:layout_constraintVertical_bias="1.0" />
 
     <ProgressBar
         android:id="@+id/pgBar_signUp"
@@ -61,4 +76,5 @@
         app:layout_constraintEnd_toEndOf="@+id/btn_signUp"
         app:layout_constraintStart_toStartOf="@+id/btn_signUp"
         app:layout_constraintTop_toBottomOf="@+id/btn_signUp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

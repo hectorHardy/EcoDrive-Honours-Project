@@ -22,7 +22,7 @@
     <string name="sw_startStop">enable start/stop mode</string>
 
     <!-- Login Page -->
-    <string name="txtIn_username">Username</string>
+    <string name="txtIn_email">email</string>
     <string name="txtIn_password">Password</string>
     <string name="btn_login">login</string>
     <string name="txt_signUpHere">click here to create a new account</string>
@@ -30,6 +30,7 @@
     <!-- SignUp Page -->
     <string name="btn_signUp">Sign Up</string>
     <string name="txt_loginHere">click here to login</string>
+    <string name="txtIn_displayName">username</string>
 
     <!-- Leaderboards page -->
     <string name="tv_position">1</string>

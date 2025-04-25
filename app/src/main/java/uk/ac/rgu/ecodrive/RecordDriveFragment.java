@@ -147,7 +147,7 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
 
@@ -177,7 +177,7 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
 
         executorService = Executors.newSingleThreadExecutor();
 
-        //for initiating recording
+        //initialise views
         btn_record = view.findViewById(R.id.btn_record);
         btn_record.setOnClickListener(this);
 
@@ -386,9 +386,9 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
         isRunning = true;
         startTime = System.currentTimeMillis();
 
-        executorService.submit(() -> {
+        executorService.submit(() -> { //run in background
             while (isRunning) {
-                try {
+                try { // not doing anything, yet...
                     Thread.sleep(1000); // Wait 1 second
                 } catch (InterruptedException e) {
                     e.printStackTrace();

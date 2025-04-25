@@ -89,16 +89,16 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
 
 
         if(user == null){
-            navController.navigate(R.id.action_homePageFragment_to_LoginFragment);
+            navController.navigate(R.id.action_homePageFragment_to_LoginFragment); //redirect to login page if user isn't logged in
         } else{
-            txt_userInfo.setText(user.getEmail());
+            txt_userInfo.setText(user.getEmail()); // display user email on homepage
         }
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        //for navigating to the record page
+        //initialise buttons and set listeners for clicks
         Button btn_record_drive_page = view.findViewById(R.id.btn_record_drive_page);
         btn_record_drive_page.setOnClickListener(this);
 
@@ -114,9 +114,10 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
         Button btn_rewards = getView().findViewById(R.id.btn_rewards);
         btn_rewards.setOnClickListener(this);
 
-        ViewFlipper vf_tips = view.findViewById(R.id.vf_tips);
-        vf_tips.setFlipInterval(10000); // 10 seconds interval
-        vf_tips.setInAnimation(getContext(), android.R.anim.slide_in_left);
+        // set up tips display
+        ViewFlipper vf_tips = view.findViewById(R.id.vf_tips); //initialise
+        vf_tips.setFlipInterval(10000); // 10 second interval for tips
+        vf_tips.setInAnimation(getContext(), android.R.anim.slide_in_left); //animate
         vf_tips.setOutAnimation(getContext(), android.R.anim.slide_out_right);
         vf_tips.startFlipping();
 
@@ -128,9 +129,9 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-        NavController navController = Navigation.findNavController(v);
+        NavController navController = Navigation.findNavController(v); // new navcontroller instance for changing fragments
 
-
+        // navigation button listeners
         if (v.getId() == R.id.btn_record_drive_page) {
             System.out.println("record nav button clicked");
             navController.navigate(R.id.action_homePageFragment_to_recordDriveFragment);
@@ -138,7 +139,7 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
             System.out.println("record nav button clicked");
             navController.navigate(R.id.action_homePageFragment_to_historyFragment);
         } else if (v.getId() == R.id.btn_logout){
-            FirebaseAuth.getInstance().signOut();
+            FirebaseAuth.getInstance().signOut(); // signs user out
             navController.navigate(R.id.action_homePageFragment_to_LoginFragment);
         } else if (v.getId() == R.id.btn_leaderbaords){
             navController.navigate(R.id.action_homePageFragment_to_leaderboardFragment);
@@ -148,12 +149,12 @@ public class HomePageFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    private void startCarAnimation() {
+    private void startCarAnimation() { //animates the car image
         ConstraintLayout parentLayout = (ConstraintLayout) iv_car.getParent();
         int screenWidth = parentLayout.getWidth();
         int carWidth = iv_car.getWidth(); // Get the car's width
 
-        ObjectAnimator animator = ObjectAnimator.ofFloat(iv_car, "translationX", -carWidth, screenWidth);
+        ObjectAnimator animator = ObjectAnimator.ofFloat(iv_car, "translationX", -carWidth, screenWidth); // -carWidth allows image to disappear off screen
         animator.setDuration(5000); // Time for car to move across
         animator.setRepeatCount(ValueAnimator.INFINITE); // Infinite loop
         animator.setRepeatMode(ValueAnimator.RESTART);

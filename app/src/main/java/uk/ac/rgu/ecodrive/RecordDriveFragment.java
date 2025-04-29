@@ -22,7 +22,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,8 +46,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -80,23 +77,20 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
     private TextView txt_accX;
     private TextView txt_accY;
     private TextView txt_accZ;
+    private TextView tv_displayScore;
     private Switch sw_startStop;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
-    private double[] location_temp = new double[3];
+    private final double[] location_temp = new double[3];
     private int speedingCount, idleCount, accelerationCount = 0;
     private boolean isRunning = false;
     private long startTime, endTime;
     private long totalTime;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-    private CollectionReference driveScoresRef = db.collection("users").document(userId).collection("driveScores");
-    private final double IDLESPEED = 1.5;
-    private final double ACCELERATIONLIMIT = 8;
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+    private final CollectionReference driveScoresRef = db.collection("users").document(userId).collection("driveScores");
+    private final double IDLESPEED = 1.8;
     private double driveScore;
-    private final double WEIGHTSPEED = 10;
-    private final double WEIGHTIDLE = 3;
-    private final double WEIGHTACC = 5;
     private static final long COOLDOWN = 2000; // 2 seconds
     private long lastAccelerationTime = 0;
 
@@ -185,7 +179,7 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
         txt_accX = view.findViewById(R.id.txt_accX);
         txt_accY = view.findViewById(R.id.txt_accY);
         txt_accZ = view.findViewById(R.id.txt_accZ);
-
+        tv_displayScore = view.findViewById(R.id.tv_displayScore);
 
         sensorManager = (SensorManager) requireActivity().getSystemService(getContext().SENSOR_SERVICE);
         if (sensorManager != null) {
@@ -220,6 +214,10 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
                 Log.d("TOTAL", "number of times speeding: " + speedingCount + ". drive time: " + totalTime + " seconds" + ". Idle count: " + idleCount + ". acceleration faults: " + accelerationCount);
                 String date = getCurrentDate();
                 calculateScore();
+                tv_displayScore.setText("YOU SCORED: " + driveScore);
+                txt_accX.setText("idle: " + idleCount);
+                txt_accY.setText("speeding: " + speedingCount);
+                txt_accZ.setText("acceleration: " + accelerationCount);
                 DriveData driveData = new DriveData(driveScore, date);
                 Log.d("DRIVEDATA", "" + driveData.toString());
                 updateDb(driveData);
@@ -239,15 +237,17 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
     @Override
     public void onSensorChanged(SensorEvent event) {
         if(isRecording){
+            //gets the x, y and z linear acceleration values
             float x = event.values[0];
             float y = event.values[1];
             float z = event.values[2];
 
-            double acceleration = Math.sqrt(x*x + y*y + z*z);
-            long currentTime = System.currentTimeMillis();
+            double acceleration = Math.sqrt(x*x + y*y + z*z); // calculates the magnitude
+            long currentTime = System.currentTimeMillis(); // gets current time
 
-            if (acceleration > ACCELERATIONLIMIT && (currentTime - lastAccelerationTime > COOLDOWN)) {
-                accelerationCount++;
+            double ACCELERATIONLIMIT = 4; //sets the limit in m/s² where a user will be penalised for accelerating / where the counter will be increased
+            if (acceleration > ACCELERATIONLIMIT && (currentTime - lastAccelerationTime > COOLDOWN)) { //stops multiple acceleration faults being recorded within specified limit
+                accelerationCount++; //increase count
                 lastAccelerationTime = currentTime;
                 Log.d("ACCELERATION", "High acceleration detected: " + acceleration);
             }
@@ -279,7 +279,7 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
                         if(speed < IDLESPEED){
                             idleCount++;
                         }
-                        double speedMph = speed * 2.23694; // Convert to km/h
+                        double speedMph = speed * 2.23694; // Convert m/s to mph
                         double latitude = location.getLatitude();
                         double longitude = location.getLongitude();
 
@@ -347,7 +347,7 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
                         for (OverpassResponse.Element element : elements) {
                             if (element.tags != null && element.tags.maxspeed != null) {
                                 try {
-                                    // Regular expression to extract numeric part from the string (e.g., "30 mph" -> "30")
+                                    // Regular expression to get only numeric part from the string
                                     String maxSpeedString = element.tags.maxspeed;
                                     String numericPart = maxSpeedString.replaceAll("[^0-9.]", "");  // Remove non-numeric characters except for '.'
 
@@ -406,10 +406,14 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
     private void calculateScore(){
         DecimalFormat df = new DecimalFormat("#.0");
 
+        double WEIGHTSPEED = 17;
+        double WEIGHTACC = 23;
         if(sw_startStop.isChecked()){
-            driveScore = 10 - (WEIGHTSPEED*speedingCount/totalTime) - (WEIGHTACC*accelerationCount/totalTime);
+            Log.d("startstop", "enabled");
+            driveScore = 10 - (WEIGHTSPEED *speedingCount/totalTime) - (WEIGHTACC *accelerationCount/totalTime);
         } else{
-            driveScore = 10 - (WEIGHTSPEED*speedingCount/totalTime) - (WEIGHTACC*accelerationCount/totalTime) - (WEIGHTIDLE*idleCount/totalTime);
+            double WEIGHTIDLE = 13;
+            driveScore = 10 - (WEIGHTSPEED *speedingCount/totalTime) - (WEIGHTACC *accelerationCount/totalTime) - (WEIGHTIDLE *idleCount/totalTime);
         }
 
         if(driveScore < 0){ driveScore = 0;}

@@ -24,7 +24,7 @@ public class LeaderboardRecyclerViewAdapter extends RecyclerView.Adapter<Leaderb
         super();
         this.context = context;
         this.drives = drives;
-        //Log.d("IS IT NULL", this.recipes.get(1).getTitle()); // error, null
+
 
     }
 

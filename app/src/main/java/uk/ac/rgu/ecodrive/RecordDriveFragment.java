@@ -353,7 +353,7 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
 
                                     if (!numericPart.isEmpty()) {
                                         double maxSpeedValue = Double.parseDouble(numericPart); // Convert to double
-                                        Log.d("SpeedLimit", "Speed Limit (in double): " + maxSpeedValue);
+                                        Log.d("SpeedLimit", "Speed Limit: " + maxSpeedValue);
                                         if(maxSpeedValue < location_temp[2]){
                                             speedingCount++;
                                         }

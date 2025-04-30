@@ -165,7 +165,7 @@ public class SignUpFragment extends Fragment {
                                             .set(userProfile, SetOptions.merge())
                                             .addOnSuccessListener(aVoid -> {
                                                 Log.d("SIGNUP", "Username saved.");
-                                                navController.navigate(R.id.action_SignUpFragment_to_homePageFragment);
+//                                                navController.navigate(R.id.action_SignUpFragment_to_homePageFragment);
                                             })
                                             .addOnFailureListener(e -> {
                                                 Log.e("SIGNUP_FAIL", "Failed to save username", e);

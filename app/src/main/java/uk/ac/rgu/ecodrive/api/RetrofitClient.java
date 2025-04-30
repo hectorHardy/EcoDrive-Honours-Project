@@ -3,7 +3,7 @@ package uk.ac.rgu.ecodrive.api;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RetrofitClient {
+public class RetrofitClient { // to handel API requests for OSM
     private static final String BASE_URL = "https://overpass-api.de/";
     private static Retrofit retrofit = null;
 

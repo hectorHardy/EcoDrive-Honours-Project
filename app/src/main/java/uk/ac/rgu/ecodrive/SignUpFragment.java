@@ -155,7 +155,7 @@ public class SignUpFragment extends Fragment {
                                     String username = txtIn_displayName.getText().toString().trim();
 
                                     if (username.isEmpty()) {
-                                        username = "Anonymous";
+                                        username = "Anonymous"; // set username to anonymous if nothing is provided
                                     }
 
                                     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -165,7 +165,6 @@ public class SignUpFragment extends Fragment {
                                             .set(userProfile, SetOptions.merge())
                                             .addOnSuccessListener(aVoid -> {
                                                 Log.d("SIGNUP", "Username saved.");
-//                                                navController.navigate(R.id.action_SignUpFragment_to_homePageFragment);
                                             })
                                             .addOnFailureListener(e -> {
                                                 Log.e("SIGNUP_FAIL", "Failed to save username", e);

@@ -94,7 +94,7 @@ public class HistoryFragment extends Fragment {
             public void onHistoryLoaded(ArrayList<DriveData> driveHistory) {
                 Log.d("HISTORY", "Drives loaded: " + driveHistory.size());
 
-                RecyclerView rv = requireView().findViewById(R.id.rv_history);
+                RecyclerView rv = requireView().findViewById(R.id.rv_history); // initialise the view
                 rv.setLayoutManager(new LinearLayoutManager(getContext()));
                 RecyclerView.Adapter adapter = new HistoryRecyclerViewAdapter(getContext(), driveHistory); // sends list of drives to be displayed on recycler view
                 rv.setAdapter(adapter);
@@ -114,13 +114,14 @@ public class HistoryFragment extends Fragment {
     }
 
     public void getHistory(DriveHistoryCallback callback) {
+        //get db instances
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (currentUser != null) {
             String userId = currentUser.getUid();
             db.collection("users").document(userId).collection("driveScores")
-                    .orderBy("date", Query.Direction.DESCENDING) // Optional: sort by newest
+                    .orderBy("date", Query.Direction.DESCENDING) // sort by newest
                     .get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
                         ArrayList<DriveData> driveHistory = new ArrayList<>();

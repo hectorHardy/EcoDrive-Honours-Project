@@ -141,7 +141,7 @@ public class LoginFragment extends Fragment{
                 return;
             }
 
-            mAuth.signInWithEmailAndPassword(email, password) //attempt to sign in with details provided
+            mAuth.signInWithEmailAndPassword(email, password) //sign in with details provided
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {

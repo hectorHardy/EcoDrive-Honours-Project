@@ -70,8 +70,8 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
     private static final String ARG_PARAM2 = "param2";
 
 
-    private boolean isRecording = false; // Flag to track button state
-    private Button btn_record; // Declare button globally
+    private boolean isRecording = false; // track button state
+    private Button btn_record;
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private TextView txt_accX;
@@ -82,13 +82,13 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
     private final double[] location_temp = new double[3];
-    private int speedingCount, idleCount, accelerationCount = 0;
+    private int speedingCount, idleCount, accelerationCount = 0; // set fault counts to 0 initially
     private boolean isRunning = false;
     private long startTime, endTime;
     private long totalTime;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-    private final CollectionReference driveScoresRef = db.collection("users").document(userId).collection("driveScores");
+    private final CollectionReference driveScoresRef = db.collection("users").document(userId).collection("driveScores"); // where to store the data
     private final double IDLESPEED = 1.8;
     private double driveScore;
     private static final long COOLDOWN = 2000; // 2 seconds
@@ -183,7 +183,7 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
 
         sensorManager = (SensorManager) requireActivity().getSystemService(getContext().SENSOR_SERVICE);
         if (sensorManager != null) {
-            accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+            accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION); //Linear sensor doesn't register gravity in output
         }
 
     }
@@ -193,7 +193,7 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
 
 
-        if (v.getId() == R.id.btn_record) { // mix of chatGPT and appDev module code
+        if (v.getId() == R.id.btn_record) {
             System.out.println("record button clicked");
             isRecording = !isRecording; // Toggle state
 
@@ -265,7 +265,7 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
 
     private void startLocationUpdates() {
         // Create LocationRequest using LocationRequest.Builder with the new Priority enum
-        LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000).build();
+        LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000).build(); // uses precise location with a 10 second delay
 
         // Set up a LocationCallback to handle location updates
         locationCallback = new LocationCallback() {
@@ -313,7 +313,6 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
                     });
             Log.d("LocationUpdates", "Location updates requested");
         } else {
-            // ... (permission request)
             Log.d("LocationUpdates", "Location permission not granted");
         }
     }
@@ -334,7 +333,7 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
         // Log query for debugging
         Log.d("SpeedLimit", "Query: " + query.toString());
 
-        OverpassApiService apiService = RetrofitClient.getClient();
+        OverpassApiService apiService = RetrofitClient.getClient(); //use retrofit to handle api calls
         Call<OverpassResponse> call = apiService.getSpeedLimit(query.toString());
 
         call.enqueue(new Callback<OverpassResponse>() {
@@ -392,7 +391,7 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
     private void stopTimer() {
         isRunning = false;
         endTime = System.currentTimeMillis();
-        long elapsedTime = (endTime - startTime) / 1000;
+        long elapsedTime = (endTime - startTime) / 1000; // finds total time and converts into seconds
         Log.d("TIMER", "Elapsed Time: " + elapsedTime + " seconds");
     }
 
@@ -453,7 +452,7 @@ public class RecordDriveFragment extends Fragment implements View.OnClickListene
 
             Log.d("DATABASE", "Total Points Calculated: " + totalPoints);
 
-            // 🔥 Use set() with merge to ensure document is created if missing
+            // Use set() with merge to ensure document is created if missing
             double finalTotalPoints = totalPoints;
             userRef.set(Collections.singletonMap("totalPoints", totalPoints), SetOptions.merge())
                     .addOnSuccessListener(aVoid -> Log.d("DATABASEUPDATED", "Total Points Updated: " + finalTotalPoints))

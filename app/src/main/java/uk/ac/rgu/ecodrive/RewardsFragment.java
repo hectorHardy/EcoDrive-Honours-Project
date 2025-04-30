@@ -79,6 +79,7 @@ public class RewardsFragment extends Fragment implements View.OnClickListener{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //initialise views
         ProgressBar pb_reward1 = getView().findViewById(R.id.pb_reward1);
         ProgressBar pb_reward2 = getView().findViewById(R.id.pb_reward2);
         ProgressBar pb_reward3 = getView().findViewById(R.id.pb_reward3);
@@ -96,7 +97,7 @@ public class RewardsFragment extends Fragment implements View.OnClickListener{
         btn_reward3.setOnClickListener(this);
         btn_reward4.setOnClickListener(this);
 
-        getTotalPoints(total -> {
+        getTotalPoints(total -> { //sets the progress bars to represent total points/ target
             Log.d("USER_SCORE", "User has total points: " + total);
 
             tv_displayTotal.setText("Total points: " + Math.round(total));
@@ -135,7 +136,7 @@ public class RewardsFragment extends Fragment implements View.OnClickListener{
                     .addOnSuccessListener(documentSnapshot -> {
                         if (documentSnapshot.exists()) {
                             Double rawTotal = documentSnapshot.getDouble("totalPoints");
-                            double totalPoints = (rawTotal != null && !rawTotal.isNaN()) ? rawTotal : 0.0;
+                            double totalPoints = (rawTotal != null && !rawTotal.isNaN()) ? rawTotal : 0.0; //prevents null values
 
                             callback.onTotalPointsRetrieved(totalPoints);
                         } else {
@@ -152,7 +153,7 @@ public class RewardsFragment extends Fragment implements View.OnClickListener{
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View v) { // shows popup with reward codes
         if (v.getId() == R.id.btn_reward1){
             showCustomPopup(getString(R.string.btn_reward1));
         } else if (v.getId() == R.id.btn_reward2){
@@ -166,15 +167,15 @@ public class RewardsFragment extends Fragment implements View.OnClickListener{
 
     private void showCustomPopup(String message){
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext()); // adds text to each popup
 
         builder.setMessage(message)
-                .setTitle("Reward Unlocked")  // Optional: Set a title
-                .setCancelable(false)  // Makes the dialog non-cancelable if desired
+                .setTitle("Reward Unlocked")  // Set a title
+                .setCancelable(false)  // Makes the dialog non-cancelable
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // Handle "OK" button click (dismiss dialog)
+                        // Handle ok button click
                         dialog.dismiss();
                     }
                 });

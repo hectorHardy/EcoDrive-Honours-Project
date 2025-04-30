@@ -110,7 +110,7 @@ public class LeaderboardFragment extends Fragment {
 
         db.collection("users")
                 .orderBy("totalPoints", Query.Direction.DESCENDING) // Sort by totalPoints in descending order
-                .limit(50) //limit to top 25 users
+                .limit(50) //limit to top 50 users
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     ArrayList<UserData> leaderboard = new ArrayList<>();
@@ -127,8 +127,6 @@ public class LeaderboardFragment extends Fragment {
                     callback.onUserDataLoaded(leaderboard);
 
                     Log.d("LEADERBOARD", "Top users: " + leaderboard);
-
-                    // You can now use the leaderboard list to update your UI (e.g., RecyclerView)
                 })
                 .addOnFailureListener(e -> {
                     Log.e("DATABASEFAIL", "Error fetching leaderboard", e);

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HomePageFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <ViewFlipper
+        android:id="@+id/vf_tips"
+        android:layout_width="411dp"
+        android:layout_height="112dp"
+        android:layout_marginTop="40dp"
+        android:autoStart="true"
+        android:background="@color/white"
+        android:elevation="4dp"
+        android:flipInterval="3000"
+        android:inAnimation="@android:anim/fade_in"
+        android:outAnimation="@android:anim/fade_out"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Tip 1 -->
+
+        <!-- Tip 2 -->
+
+        <TextView
+            android:id="@+id/tv_tip1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/tv_tip1"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_tip2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/tv_tip2"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+
+        <!-- Tip 3 -->
+        <TextView
+            android:id="@+id/tv_tip3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/tv_tip3"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+
+        <!-- Tip 4 -->
+        <TextView
+            android:id="@+id/tv_tip4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/tv_tip4"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+
+    </ViewFlipper>
+
+    <Button
+        android:id="@+id/btn_record_drive_page"
+        android:layout_width="174dp"
+        android:layout_height="119dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="64dp"
+        android:text="@string/btn_record_drive_page"
+        app:cornerRadius="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/vf_tips" />
+
+    <Button
+        android:id="@+id/btn_rewards"
+        android:layout_width="174dp"
+        android:layout_height="119dp"
+        android:text="@string/btn_rewards"
+        app:cornerRadius="15dp"
+        app:layout_constraintEnd_toEndOf="@+id/btn_history"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/btn_leaderbaords"
+        app:layout_constraintTop_toTopOf="@+id/btn_leaderbaords" />
+
+    <Button
+        android:id="@+id/btn_leaderbaords"
+        android:layout_width="174dp"
+        android:layout_height="119dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/btn_leaderboards"
+        app:cornerRadius="15dp"
+        app:layout_constraintStart_toStartOf="@+id/btn_record_drive_page"
+        app:layout_constraintTop_toBottomOf="@+id/btn_record_drive_page" />
+
+    <Button
+        android:id="@+id/btn_history"
+        android:layout_width="174dp"
+        android:layout_height="119dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/btn_history"
+        app:cornerRadius="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/btn_record_drive_page"
+        app:layout_constraintTop_toTopOf="@+id/btn_record_drive_page" />
+
+    <TextView
+        android:id="@+id/txt_userInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txt_userInfo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/btn_leaderbaords"
+        app:layout_constraintTop_toBottomOf="@+id/btn_leaderbaords"
+        app:layout_constraintVertical_bias="0.731" />
+
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="172dp"
+        android:text="@string/btn_logout"
+        app:cornerRadius="15dp"
+        app:layout_constraintEnd_toEndOf="@+id/btn_rewards"
+        app:layout_constraintHorizontal_bias="0.995"
+        app:layout_constraintStart_toEndOf="@+id/txt_userInfo"
+        app:layout_constraintTop_toBottomOf="@+id/btn_leaderbaords" />
+
+    <ImageView
+        android:id="@+id/iv_car"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/car_32"
+        app:layout_constraintBottom_toTopOf="@+id/vf_tips"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

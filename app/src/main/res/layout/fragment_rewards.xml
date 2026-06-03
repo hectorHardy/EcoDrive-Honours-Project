@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="visible"
+    tools:context=".RewardsFragment">
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="126dp"
+        android:layout_height="126dp"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/img_2"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="@+id/tv_posTitle"
+        app:layout_constraintStart_toStartOf="@+id/tv_posTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tv_posTitle" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="126dp"
+        android:layout_height="126dp"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/img"
+        app:layout_constraintEnd_toEndOf="@+id/tv_reward1"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tv_reward1"
+        app:layout_constraintTop_toBottomOf="@+id/tv_reward1" />
+
+    <ProgressBar
+        android:id="@+id/pb_reward1"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="126dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="12dp"
+        android:max="100"
+        android:progress="0"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <TextView
+        android:id="@+id/tv_posTitle"
+        android:layout_width="126dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="40dp"
+        android:text="@string/tv_reward2"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_reward1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/tv_reward1"
+        android:layout_width="126dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/tv_reward1"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/pb_reward2"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="126dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="12dp"
+        android:max="200"
+        android:progress="0"
+        app:layout_constraintEnd_toEndOf="@+id/imageView2"
+        app:layout_constraintStart_toStartOf="@+id/imageView2"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+    <TextView
+        android:id="@+id/tv_reward3"
+        android:layout_width="126dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="112dp"
+        android:text="@string/tv_reward3"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/pb_reward1"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/pb_reward1"
+        app:layout_constraintTop_toBottomOf="@+id/pb_reward1" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="126dp"
+        android:layout_height="126dp"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/img_1"
+        app:layout_constraintEnd_toEndOf="@+id/tv_reward3"
+        app:layout_constraintStart_toStartOf="@+id/tv_reward3"
+        app:layout_constraintTop_toBottomOf="@+id/tv_reward3" />
+
+    <ProgressBar
+        android:id="@+id/pb_reward3"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="126dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="12dp"
+        android:max="300"
+        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+    <TextView
+        android:id="@+id/tv_reward4"
+        android:layout_width="126dp"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_reward4"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_reward3"
+        app:layout_constraintEnd_toEndOf="@+id/pb_reward2"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/pb_reward2" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="126dp"
+        android:layout_height="126dp"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/img_3"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+        app:layout_constraintEnd_toEndOf="@+id/tv_reward4"
+        app:layout_constraintStart_toStartOf="@+id/tv_reward4"
+        app:layout_constraintTop_toBottomOf="@+id/tv_reward4" />
+
+    <ProgressBar
+        android:id="@+id/pb_reward4"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="126dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="12dp"
+        android:max="400"
+        app:layout_constraintBottom_toBottomOf="@+id/pb_reward3"
+        app:layout_constraintEnd_toEndOf="@+id/imageView4"
+        app:layout_constraintStart_toStartOf="@+id/imageView4"
+        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+
+    <Button
+        android:id="@+id/btn_reward1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_seeReward"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/pb_reward1"
+        app:layout_constraintHorizontal_bias="0.531"
+        app:layout_constraintStart_toStartOf="@+id/pb_reward1"
+        app:layout_constraintTop_toBottomOf="@+id/pb_reward1" />
+
+    <Button
+        android:id="@+id/btn_reward2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_seeReward"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/pb_reward2"
+        app:layout_constraintStart_toStartOf="@+id/pb_reward2"
+        app:layout_constraintTop_toBottomOf="@+id/pb_reward2" />
+
+    <Button
+        android:id="@+id/btn_reward3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_seeReward"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/pb_reward3"
+        app:layout_constraintStart_toStartOf="@+id/pb_reward3"
+        app:layout_constraintTop_toBottomOf="@+id/pb_reward3" />
+
+    <Button
+        android:id="@+id/btn_reward4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_seeReward"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/pb_reward4"
+        app:layout_constraintStart_toStartOf="@+id/pb_reward4"
+        app:layout_constraintTop_toBottomOf="@+id/pb_reward4" />
+
+    <TextView
+        android:id="@+id/tv_displayTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

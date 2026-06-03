@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">EcoDrive</string>
+
+    <!-- Home Page -->
+    <string name="tv_tip1">Steady acceleration and braking helps to save fuel</string>
+    <string name="tv_tip2">Reducing car weight can increase efficiency</string>
+    <string name="tv_tip3">Make sure your tires are inflated to the recommended pressure for optimal traction and efficiency</string>
+    <string name="tv_tip4">Stick to the speed limit to save fuel and increase safety!</string>
+
+    <string name="btn_record_drive_page">Record Drive</string>
+    <string name="btn_history">Driving History</string>
+    <string name="btn_leaderboards">Leaderboards</string>
+    <string name="btn_rewards">Rewards</string>
+
+    <string name="txt_userInfo">Logged In</string>
+    <string name="btn_logout">logout</string>
+
+    <!-- Record Drive Page -->
+    <string name="btn_record_start">Start Journey</string>
+    <string name="btn_record_end">End Journey</string>
+
+    <string name="sw_startStop">enable start/stop mode</string>
+
+    <!-- Login Page -->
+    <string name="txtIn_email">email</string>
+    <string name="txtIn_password">Password</string>
+    <string name="btn_login">login</string>
+    <string name="txt_signUpHere">click here to create a new account</string>
+
+    <!-- SignUp Page -->
+    <string name="btn_signUp">Sign Up</string>
+    <string name="txt_loginHere">click here to login</string>
+    <string name="txtIn_displayName">username</string>
+
+    <!-- Leaderboards page -->
+    <string name="tv_position">1</string>
+    <string name="tv_userName">Username</string>
+    <string name="tv_totalScore">0</string>
+    <string name="tv_totalTitle">Total Score</string>
+    <string name="tv_userTitle">User Name</string>
+    <string name="tv_posTitle">Position</string>
+
+    <!-- Rewards page -->
+    <string name="tv_reward1">£75 off insurance</string>
+    <string name="tv_reward2">10% off tyres</string>
+    <string name="tv_reward3">10% off car hire</string>
+    <string name="tv_reward4">10% off service</string>
+
+    <string name="btn_reward1">use VOUCHERCODES75 at marshmallow.com</string>
+    <string name="btn_reward2">use PGB10 at National.co.uk</string>
+    <string name="btn_reward3">use HAPPYBD10 at Europcar.co.uk</string>
+    <string name="btn_reward4">use START-SERV-10 at Halfords.co.uk</string>
+
+    <string name="btn_seeReward">see reward</string>
+
+    <!-- History Page -->
+    <string name="tv_driveDate">00/00/0000</string>
+    <string name="tv_dateTitle">Drive Date</string>
+    <string name="tv_scoreTitle">Drive Score</string>
+    <string name="tv_avgTitle">Average:</string>
+
+
+</resources>

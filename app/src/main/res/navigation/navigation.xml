@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/LoginFragment">
+
+    <fragment
+        android:id="@+id/homePageFragment"
+        android:name="uk.ac.rgu.ecodrive.HomePageFragment"
+        android:label="fragment_home_page"
+        tools:layout="@layout/fragment_home_page" >
+        <action
+            android:id="@+id/action_homePageFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
+        <action
+            android:id="@+id/action_homePageFragment_to_recordDriveFragment"
+            app:destination="@id/recordDriveFragment" />
+        <action
+            android:id="@+id/action_homePageFragment_to_LoginFragment"
+            app:destination="@id/LoginFragment" />
+        <action
+            android:id="@+id/action_homePageFragment_to_rewardsFragment"
+            app:destination="@id/rewardsFragment" />
+        <action
+            android:id="@+id/action_homePageFragment_to_leaderboardFragment"
+            app:destination="@id/leaderboardFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="uk.ac.rgu.ecodrive.HistoryFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" />
+    <fragment
+        android:id="@+id/recordDriveFragment"
+        android:name="uk.ac.rgu.ecodrive.RecordDriveFragment"
+        android:label="fragment_record_drive"
+        tools:layout="@layout/fragment_record_drive" />
+    <fragment
+        android:id="@+id/LoginFragment"
+        android:name="uk.ac.rgu.ecodrive.LoginFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" >
+        <action
+            android:id="@+id/action_LoginFragment_to_SignUpFragment"
+            app:destination="@id/SignUpFragment" />
+        <action
+            android:id="@+id/action_LoginFragment_to_homePageFragment"
+            app:destination="@id/homePageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/SignUpFragment"
+        android:name="uk.ac.rgu.ecodrive.SignUpFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" >
+        <action
+            android:id="@+id/action_SignUpFragment_to_LoginFragment"
+            app:destination="@id/LoginFragment" />
+        <action
+            android:id="@+id/action_SignUpFragment_to_homePageFragment"
+            app:destination="@id/homePageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/rewardsFragment"
+        android:name="uk.ac.rgu.ecodrive.RewardsFragment"
+        android:label="fragment_rewards"
+        tools:layout="@layout/fragment_rewards" />
+    <fragment
+        android:id="@+id/leaderboardFragment"
+        android:name="uk.ac.rgu.ecodrive.LeaderboardFragment"
+        android:label="fragment_leaderboard"
+        tools:layout="@layout/fragment_leaderboard" />
+</navigation>
